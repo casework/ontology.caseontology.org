@@ -38,7 +38,7 @@ all: \
 	  && ontospy gendocs \
 	    --outputpath $$PWD/documentation \
 	    --theme united \
-	    --title case-0.5.0-docs \
+	    --title case-0.6.0-docs \
 	    --type 2 \
 	    $(top_srcdir)/dependencies/CASE/tests/case_monolithic.ttl
 	touch $@
@@ -63,13 +63,19 @@ all: \
 
 case.rdf: \
   $(top_srcdir)/dependencies/CASE/ontology/master/case.ttl \
-  $(RDF_TOOLKT_JAR)
+  $(RDF_TOOLKT_JAR) \
+  namespaces.sed
 	java -jar $(RDF_TOOLKT_JAR) \
 	  --inline-blank-nodes \
 	  --source $< \
 	  --source-format turtle \
-	  --target _$@ \
+	  --target __$@ \
 	  --target-format rdf-xml
+	sed \
+	  -f namespaces.sed \
+	  __$@ \
+	  > _$@
+	rm __$@
 	mv _$@ $@
 
 case.ttl: \
@@ -96,13 +102,19 @@ clean-symlinking:
 
 investigation.rdf: \
   $(top_srcdir)/dependencies/CASE/ontology/investigation/investigation.ttl \
-  $(RDF_TOOLKT_JAR)
+  $(RDF_TOOLKT_JAR) \
+  namespaces.sed
 	java -jar $(RDF_TOOLKT_JAR) \
 	  --inline-blank-nodes \
 	  --source $< \
 	  --source-format turtle \
-	  --target _$@ \
+	  --target __$@ \
 	  --target-format rdf-xml
+	sed \
+	  -f namespaces.sed \
+	  __$@ \
+	  > _$@
+	rm __$@
 	mv _$@ $@
 
 investigation.ttl: \
@@ -111,13 +123,19 @@ investigation.ttl: \
 
 vocabulary.rdf: \
   $(top_srcdir)/dependencies/CASE/ontology/vocabulary/vocabulary.ttl \
-  $(RDF_TOOLKT_JAR)
+  $(RDF_TOOLKT_JAR) \
+  namespaces.sed
 	java -jar $(RDF_TOOLKT_JAR) \
 	  --inline-blank-nodes \
 	  --source $< \
 	  --source-format turtle \
-	  --target _$@ \
+	  --target __$@ \
 	  --target-format rdf-xml
+	sed \
+	  -f namespaces.sed \
+	  __$@ \
+	  > _$@
+	rm __$@
 	mv _$@ $@
 
 vocabulary.ttl: \
