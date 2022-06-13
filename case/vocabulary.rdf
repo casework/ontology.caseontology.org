@@ -12,7 +12,7 @@
 	</owl:Ontology>
 	
 	<rdfs:Datatype rdf:about="&vocab;InvestigationFormVocab">
-		<rdfs:subClassOf rdf:resource="&rdfs;Resource"/>
+		<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
 		<rdfs:label xml:lang="en-US">Investigation Form Vocabulary</rdfs:label>
 		<rdfs:comment xml:lang="en-US">Defines an open-vocabulary of investigation forms.</rdfs:comment>
 		<owl:oneOf>
@@ -24,7 +24,7 @@
 						<rdf:rest>
 							<rdf:Description>
 								<rdf:first rdf:datatype="&vocab;InvestigationFormVocab">suspicious-activity</rdf:first>
-								<rdf:rest rdf:resource="&rdf;nil"/>
+								<rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
 							</rdf:Description>
 						</rdf:rest>
 					</rdf:Description>
