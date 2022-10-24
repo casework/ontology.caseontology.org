@@ -10,7 +10,7 @@ RewriteEngine On
 RewriteBase /
 
 # Upgrade all connections to https
-RewriteCond %{HTTPS} off 
+RewriteCond %{HTTPS} off
 RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301]
 
 # Deny access to a variety of directories/files
@@ -45,15 +45,26 @@ RewriteCond %{REQUEST_URI} !\.rdf [NC]
 RewriteCond %{HTTP_ACCEPT} application/rdf\+xml
 RewriteRule ^case/(.*)$ case/$1.rdf [L,R=303]
 
+# Rewrite directly to the rdf when ^case/<target> isn't docs
+RewriteCond %{REQUEST_URI} !^/case/documentation/static/ [NC]
+RewriteCond %{REQUEST_URI} !\.rdf [NC]
+RewriteCond %{REQUEST_URI} !\.ttl [NC]
+RewriteCond %{REQUEST_URI} !\.html [NC]
+RewriteCond %{HTTP_ACCEPT} text/html [OR]
+RewriteCond %{HTTP_ACCEPT} application/xhtml\+xml [OR]
+RewriteRule ^case/(.*)$ case/$1.rdf [L,R=303]
+
 # Rewrite rule: to serve HTML of some case sub-dir
 RewriteCond %{REQUEST_URI} !^/case/documentation/static/ [NC]
-RewriteCond %{REQUEST_URI} !\.html [NC]
+RewriteCond %{REQUEST_URI} !\.* [NC]
 RewriteCond %{HTTP_ACCEPT} text/html [OR]
 RewriteCond %{HTTP_ACCEPT} application/xhtml\+xml [OR]
 RewriteRule ^case/(.*)/(.*)$ case/$1/$2.html [L,R=303]
 
 # Rewrite rule: serve based on user-agent
 RewriteCond %{REQUEST_URI} !^/case/documentation/static/ [NC]
+RewriteCond %{REQUEST_URI} !\.rdf [NC]
+RewriteCond %{REQUEST_URI} !\.ttl [NC]
 RewriteCond %{REQUEST_URI} !\.html [NC]
 RewriteCond %{HTTP_ACCEPT} text/html [OR]
 RewriteCond %{HTTP_ACCEPT} application/xhtml\+xml [OR]
