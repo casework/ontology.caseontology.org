@@ -82,12 +82,12 @@
 		<sh:targetClass rdf:resource="https://ontology.caseontology.org/case/investigation/Examiner"/>
 	</rdf:Description>
 	
-	<rdf:Description rdf:about="https://ontology.caseontology.org/case/investigation/ExaminerActionLifecylce">
+	<rdf:Description rdf:about="https://ontology.caseontology.org/case/investigation/ExaminerActionLifecycle">
 		<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
 		<rdf:type rdf:resource="http://www.w3.org/ns/shacl#NodeShape"/>
 		<rdfs:subClassOf rdf:resource="https://ontology.unifiedcyberontology.org/uco/action/ActionLifecycle"/>
-		<rdfs:label xml:lang="en">ExaminerActionLifecylce</rdfs:label>
-		<rdfs:comment xml:lang="en">An examiner action life cycle is an action pattern consisting of an ordered set of actions or subordinate action-lifecycles performed by an entity acting in a role involved in providing scientific evaluations of evidence that is used to aid law enforcement investigations and court cases.</rdfs:comment>
+		<rdfs:label xml:lang="en">ExaminerActionLifecycle</rdfs:label>
+		<rdfs:comment xml:lang="en">An examiner action lifecycle is an action pattern consisting of an ordered set of actions or subordinate action-lifecycles performed by an entity acting in a role involved in providing scientific evaluations of evidence that is used to aid law enforcement investigations and court cases.</rdfs:comment>
 		<sh:targetClass rdf:resource="https://ontology.caseontology.org/case/investigation/ExaminerActionLifecylce"/>
 	</rdf:Description>
 	
@@ -211,7 +211,7 @@
 		<rdf:type rdf:resource="http://www.w3.org/ns/shacl#NodeShape"/>
 		<rdfs:subClassOf rdf:resource="https://ontology.unifiedcyberontology.org/uco/action/ActionLifecycle"/>
 		<rdfs:label xml:lang="en">SubjectActionLifecycle</rdfs:label>
-		<rdfs:comment xml:lang="en">A subject action life cycle is an action pattern consisting of an ordered set of multiple actions or subordinate action-lifecycles performed by an entity acting in a role whose conduct may be within the scope of an investigation.</rdfs:comment>
+		<rdfs:comment xml:lang="en">A subject action lifecycle is an action pattern consisting of an ordered set of multiple actions or subordinate action-lifecycles performed by an entity acting in a role whose conduct may be within the scope of an investigation.</rdfs:comment>
 		<sh:targetClass rdf:resource="https://ontology.caseontology.org/case/investigation/SubjectActionLifecycle"/>
 	</rdf:Description>
 	
@@ -220,7 +220,7 @@
 		<rdf:type rdf:resource="http://www.w3.org/ns/shacl#NodeShape"/>
 		<rdfs:subClassOf rdf:resource="https://ontology.unifiedcyberontology.org/uco/action/ActionLifecycle"/>
 		<rdfs:label xml:lang="en">VictimActionLifecycle</rdfs:label>
-		<rdfs:comment xml:lang="en">A victim action life cycle is an action pattern consisting of an ordered set of multiple actions or subordinate action-lifecycles performed by an entity acting in a role characterized by its potential to be harmed as a result of a crime, accident, or other event or action.</rdfs:comment>
+		<rdfs:comment xml:lang="en">A victim action lifecycle is an action pattern consisting of an ordered set of multiple actions or subordinate action-lifecycles performed by an entity acting in a role characterized by its potential to be harmed as a result of a crime, accident, or other event or action.</rdfs:comment>
 		<sh:targetClass rdf:resource="https://ontology.caseontology.org/case/investigation/VictimActionLifecycle"/>
 	</rdf:Description>
 	

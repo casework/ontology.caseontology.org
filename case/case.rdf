@@ -19,7 +19,7 @@
 		<owl:incompatibleWith rdf:resource="http://case.example.org/core"/>
 		<owl:ontologyIRI rdf:resource="https://ontology.caseontology.org/case/case"/>
 		<owl:priorVersion rdf:resource="http://case.example.org/core"/>
-		<owl:versionInfo>0.6.0</owl:versionInfo>
+		<owl:versionInfo>0.7.0</owl:versionInfo>
 	</owl:Ontology>
 
 </rdf:RDF>
