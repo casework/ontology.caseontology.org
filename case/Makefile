@@ -78,11 +78,15 @@ case.rdf: \
 	  __$@ \
 	  > _$@
 	rm __$@
+	mkdir -p case
+	cp _$@ case/$(CURRENT_RELEASE).rdf
 	mv _$@ $@
 
 case.ttl: \
   $(top_srcdir)/dependencies/CASE/ontology/master/case.ttl
 	cp $< $@
+	mkdir -p case
+	cp $< case/$(CURRENT_RELEASE).ttl
 
 clean: \
   clean-symlinking
@@ -117,11 +121,15 @@ investigation.rdf: \
 	  __$@ \
 	  > _$@
 	rm __$@
+	mkdir -p investigation
+	cp _$@ investigation/$(CURRENT_RELEASE).rdf
 	mv _$@ $@
 
 investigation.ttl: \
   $(top_srcdir)/dependencies/CASE/ontology/investigation/investigation.ttl
 	cp $< $@
+	mkdir -p investigation
+	cp $< investigation/$(CURRENT_RELEASE).ttl
 
 vocabulary.rdf: \
   $(top_srcdir)/dependencies/CASE/ontology/vocabulary/vocabulary.ttl \
@@ -138,8 +146,12 @@ vocabulary.rdf: \
 	  __$@ \
 	  > _$@
 	rm __$@
+	mkdir -p vocabulary
+	cp _$@ vocabulary/$(CURRENT_RELEASE).rdf
 	mv _$@ $@
 
 vocabulary.ttl: \
   $(top_srcdir)/dependencies/CASE/ontology/vocabulary/vocabulary.ttl
 	cp $< $@
+	mkdir -p vocabulary
+	cp $< vocabulary/$(CURRENT_RELEASE).ttl
