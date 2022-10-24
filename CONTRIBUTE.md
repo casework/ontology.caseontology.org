@@ -1,14 +1,40 @@
-## Ontodocs Auto-Deployment
+# Ontodocs Auto-Deployment
 
-Previously, documentation for new releases of *CASE* would have to be manually built using gendocs/ontodocs, in order to deploy documentation via the [CASE website](https://caseontology.org/). With this repository, building the documentation and deploying it on the web will be a more automated process, and allow for local documentation to be built for necessary cases.
+Previously, documentation for new releases of *CASE*/*UCO* would have to be manually built using gendocs/ontodocs, in order to deploy documentation via the project websites ([CASE](https://caseontology.org/)/[UCO](https://unifiedcyberontology.org)). With this repository, building the documentation and deploying it on the web will be a more automated process, and allow for local documentation to be built for necessary cases.
 
 
+## Directions for generating documentation for a new release
 
-#### Deployment
+The intended audience for this section is documentation maintainers.
+
+
+### Warnings
+
+The documentation generation must be carried out on a case-sensitive file system.  (macOS's default file system deployment is case-insensitive.)
+
+**Do not** commit changes under the `/case` directory on a case-insensitive file system.  Conflicts due to upper-vs.-lower casing will create erroneous symlink references.  Be aware that changes will be present on a fresh `git clone` in a case-insensitive file system.
+
+
+### Generation directions
+
+When a new ontology release is created, follow these steps:
+
+1. Update the ontology-tracking submodule pointer in this repository to point at the new release's commit.
+2. The version of CASE is hard-coded in `case/Makefile` as part of titling the documentation.  Update it to the new version.
+3. Run `make clean`.
+4. Run `make`.  (`make -j` will work.)
+5. Run `git add case`.  This will pick up all file deletions and new file creations.
+6. Commit the changes.
+7. Push to Github.
+8. Run `git pull` in the deployment space.
+
+
+## Directions for deployment of this repository as a documentation service
+
 For the deployment of the documentation, we assume this repository is cloned to a Linux server, becoming the directory `/srv/http/case-docs/public/`.  If you clone it to another directory, ensure that any commands which tell you to alter the permissions to the mentioned directory or configuration files that use it are updated.
 
 
-###### Configuration
+### Configuration
 To deploy, the system will need to have **Apache2** installed and this repository cloned on it. We will use  *Apache2's VirtualHost* feature and *mod_rewrite* extension to route traffic to the proper documentation pages. This CONTRIBUTE.md page will outline installing **Apache2** and utilizing the **Makefile** to test the setup. All commands will assume the deployment system is a debian-based system *(such as Ubuntu)*.
 
 
@@ -94,7 +120,7 @@ $ sudo service apache2 restart
 
 
 
-###### Optional Localhost
+#### Optional Localhost
 
 If you are running the deployment on a system that does not access the internet, or you wish to only provide the documentation locally, you may want to add an entry to your hosts file.
 
@@ -104,7 +130,7 @@ $ sudo vi /etc/hosts
 
 
 
-###### Debugging
+### Debugging
 
 There are a variety of errors that you can face, but we are going to address the most common ones. 
 
@@ -146,7 +172,7 @@ git status
 ```
 
 
-#### Testing
+### Testing
 
 To test the deployment, run the **Makefile** to ensure expected URL behaviors and content types.
 

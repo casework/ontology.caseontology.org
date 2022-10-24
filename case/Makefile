@@ -15,6 +15,8 @@ SHELL := /bin/bash
 
 top_srcdir := $(shell cd .. ; pwd)
 
+CURRENT_RELEASE := 0.6.0
+
 RDF_TOOLKT_JAR := $(top_srcdir)/dependencies/CASE/lib/rdf-toolkit.jar
 
 all: \
@@ -38,7 +40,7 @@ all: \
 	  && ontospy gendocs \
 	    --outputpath $$PWD/documentation \
 	    --theme united \
-	    --title case-0.6.0-docs \
+	    --title case-$(CURRENT_RELEASE)-docs \
 	    --type 2 \
 	    $(top_srcdir)/dependencies/CASE/tests/case_monolithic.ttl
 	touch $@
@@ -56,7 +58,7 @@ all: \
 	  && python3 $(top_srcdir)/src/map_concepts_as_symlinks.py \
 	    $(top_srcdir)/dependencies/CASE/ontology/investigation/investigation.ttl
 	# Spot-check one concept's link.
-	test -r documentation/class-investigationInvestigativeAction.html
+	test -r documentation/class-investigationinvestigativeaction.html
 	test -L investigation/InvestigativeAction.html
 	test -r investigation/InvestigativeAction.html
 	touch $@
