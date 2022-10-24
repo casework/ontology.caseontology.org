@@ -15,7 +15,7 @@ SHELL := /bin/bash
 
 top_srcdir := $(shell cd .. ; pwd)
 
-CURRENT_RELEASE := 0.7.0
+CURRENT_RELEASE := 0.7.1
 
 RDF_TOOLKT_JAR := $(top_srcdir)/dependencies/CASE/dependencies/UCO/lib/rdf-toolkit.jar
 
