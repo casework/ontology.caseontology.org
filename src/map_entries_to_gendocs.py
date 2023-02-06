@@ -10,14 +10,27 @@ import logging
 import json
 import os
 from typing import Dict
-
 import rdflib.plugins.sparql
+
+CACHE_FILE = "../version_mappings_cache.json"
 
 def debug_printlinks(symlinks: Dict[str, str]) -> None:
     """Outputs the contents of the symlinks dict, for debugging only."""
 
     for src, dst in symlinks.items():
         logging.debug(repr(src) + " -> " + repr(dst))
+
+def write_cache(mappings: Dict[str, str]) -> bool:
+    """Writes a dictionary to a json file on as cache."""
+
+    try:
+        with open(CACHE_FILE, 'w+') as wp:
+            json.dump(mappings, wp, indent=4)
+            print(f'Wrote cache to {CACHE_FILE}')
+        return True
+    except Exception as e:
+        print(f'Failed to write cache file: {e}')
+        return False
 
 def create_symlinks(top_srcdir: str, symlinks: Dict[str, str]) -> None:
     """Create symlinks based on generated gendoc -> web path."""
@@ -69,7 +82,7 @@ def main() -> None:
     queries["prop"] = "SELECT ?nConcept WHERE {{ ?nConcept a owl:DatatypeProperty . } UNION { ?nConcept a owl:ObjectProperty . }}"
 
     # hold gendoc location, assoicated to symlinked path -- dict(gendocs-path : symlink)
-    symlinks: Dict[str, str] = dict()
+    mappings: Dict[str, str] = dict()
 
     # generate paths for symlink src/dst locations
     tally = 0
@@ -88,16 +101,12 @@ def main() -> None:
             gendocs_target = f"../documentation/{prefix}-{iri_parts[-2]}{iri_parts[-1].lower()}.html"
 
             # format gendoc -> symlink (src, dst) combos
-            symlinks[url_path] = gendocs_target
-
-    print(json.dumps(symlinks, indent=4))
+            mappings[url_path] = gendocs_target
 
     if tally == 0:
         logging.warning(f"Found neither classes nor properties in input graph-file %r." % args.inTtl)
 
-    top_srcdir = os.path.dirname(os.path.dirname(__file__))
-    debug_printlinks(symlinks)
-    #create_symlinks(top_srcdir, symlinks)
+    write_cache(mappings)
 
 if __name__ == "__main__":
     main()
