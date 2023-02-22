@@ -1,0 +1,6 @@
+https://ontology.caseontology.org/case/case
+https://ontology.caseontology.org/case/case/0.7.1
+https://ontology.caseontology.org/case/investigation
+https://ontology.caseontology.org/case/investigation/0.7.1
+https://ontology.caseontology.org/case/vocabulary
+https://ontology.caseontology.org/case/vocabulary/0.7.1
