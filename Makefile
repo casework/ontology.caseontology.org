@@ -15,20 +15,43 @@ SHELL := /bin/bash
 
 top_srcdir := $(shell pwd)
 
+# TODO - This should probably be parsed into a file.
+CURRENT_RELEASE := 0.7.1
+
 # Use HOST_PREFIX to test the deployment at the specified host.
 # Syntax note - there is no trailing slash.
 HOST_PREFIX ?= http://localhost
 
 all: \
-  all-case \
   iri_mappings_to_html.json \
   iri_mappings_to_rdf.json \
   iri_mappings_to_ttl.json
 
 .PHONY: \
-  all-case \
   check-service
 
+.case.done.log: \
+  .venv.done.log \
+  dependencies/CASE/tests/case_monolithic.ttl
+	$(MAKE) \
+	  CURRENT_RELEASE=$(CURRENT_RELEASE) \
+	  --directory case
+	touch $@
+
+.documentation.done.log: \
+  .venv.done.log \
+  dependencies/CASE/tests/case_monolithic.ttl
+	rm -rf documentation
+	mkdir documentation
+	source venv/bin/activate \
+	  && ontospy gendocs \
+	    --outputpath $$PWD/documentation \
+	    --theme united \
+	    --title case-$(CURRENT_RELEASE)-docs \
+	    --type 2 \
+	    $(top_srcdir)/dependencies/CASE/tests/case_monolithic.ttl
+	test -r documentation/index.html
+	touch $@
 
 # This target checks for a file's existence to confirm that the submodule
 # has been checked out at least once.  To simplify development work, a
@@ -48,7 +71,8 @@ all: \
 	touch $@
 
 .venv.done.log: \
-  .git_submodule_init.done.log
+  .git_submodule_init.done.log \
+  requirements.txt
 	rm -rf venv
 	python3 -m venv \
 	  venv
@@ -58,21 +82,14 @@ all: \
 	    pip \
 	    setuptools \
 	    wheel
-	# TODO - Ontospy does not currently handle Django >= 4.
 	source venv/bin/activate \
 	  && pip install \
-	    django==3.2.9
+	    --requirement requirements.txt
 	source venv/bin/activate \
 	  && pip install \
 	    --editable \
 	    dependencies/Ontospy[FULL]
 	touch $@
-
-all-case: \
-  .venv.done.log \
-  dependencies/CASE/tests/case_monolithic.ttl
-	$(MAKE) \
-	  --directory case
 
 # Test matrix:
 # Concept broad type: ontology, class, or property
@@ -216,6 +233,7 @@ ontology_iris_archive.txt: \
 	mv _$@ $@
 
 iri_mappings_to_html.json: \
+  .documentation.done.log \
   ontology_iris_archive.txt \
   src/map_entries_to_gendocs.py
 	source venv/bin/activate \
@@ -226,6 +244,7 @@ iri_mappings_to_html.json: \
 	      $(top_srcdir)/ontology_iris_archive.txt
 
 iri_mappings_to_rdf.json: \
+  .case.done.log \
   ontology_iris_archive.txt \
   src/map_iris_to_graph_file.py
 	source venv/bin/activate \
@@ -237,6 +256,7 @@ iri_mappings_to_rdf.json: \
 	mv _$@ $@
 
 iri_mappings_to_ttl.json: \
+  .case.done.log \
   ontology_iris_archive.txt \
   src/map_iris_to_graph_file.py
 	source venv/bin/activate \

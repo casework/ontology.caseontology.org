@@ -1,0 +1,2 @@
+# TODO - Ontospy does not currently handle Django >= 4.
+django==3.2.9
