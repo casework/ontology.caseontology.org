@@ -3,8 +3,6 @@
     "/case/case/0.7.1": "/documentation/index.html",
     "/case/investigation": "/documentation/index.html",
     "/case/investigation/0.7.1": "/documentation/index.html",
-    "/case/vocabulary": "/documentation/index.html",
-    "/case/vocabulary/0.7.1": "/documentation/index.html",
     "/case/investigation/Attorney": "/documentation/class-investigationattorney.html",
     "/case/investigation/Authorization": "/documentation/class-investigationauthorization.html",
     "/case/investigation/Examiner": "/documentation/class-investigationexaminer.html",
@@ -22,8 +20,10 @@
     "/case/investigation/focus": "/documentation/prop-investigationfocus.html",
     "/case/investigation/investigationForm": "/documentation/prop-investigationinvestigationform.html",
     "/case/investigation/investigationStatus": "/documentation/prop-investigationinvestigationstatus.html",
-    "/case/investigation/rootExhibitNumber": "/documentation/prop-investigationrootexhibitnumber.html",
     "/case/investigation/relevantAuthorization": "/documentation/prop-investigationrelevantauthorization.html",
+    "/case/investigation/rootExhibitNumber": "/documentation/prop-investigationrootexhibitnumber.html",
     "/case/investigation/wasDerivedFrom": "/documentation/prop-investigationwasderivedfrom.html",
-    "/case/investigation/wasInformedBy": "/documentation/prop-investigationwasinformedby.html"
+    "/case/investigation/wasInformedBy": "/documentation/prop-investigationwasinformedby.html",
+    "/case/vocabulary": "/documentation/index.html",
+    "/case/vocabulary/0.7.1": "/documentation/index.html"
 }
