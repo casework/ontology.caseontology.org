@@ -72,6 +72,7 @@ def main() -> None:
     parser.add_argument('--debug', action="store_true")
     parser.add_argument('--ontology-base', default="https://ontology.caseontology.org", help="Restrict mapped concepts to start with only this domain.")
     parser.add_argument('inTtl', type=str, help='ttl file to build sym-links off of')
+    parser.add_argument('inTxt', type=str, help='txt file listing all ontology IRIs and version IRIs to expect')
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
@@ -86,43 +87,18 @@ def main() -> None:
     # hold gendoc location, associated to symlinked path -- dict(gendocs-path : symlink)
     mappings: Dict[str, str] = dict()
 
-    # Find all ontology-level IRIs and version IRIs.
-    # (These IRIs are for the OWL ontologies and their versions, not for classes, shapes, etc.)
-    # With HTML requests, these will all map to the documentation root.
+    # With HTML requests, ontology-level IRIs will all map to the documentation root.
+    # NOTE: This currently includes past versions.  The documentation site does not currently serve rendered documentation for prior ontology versions.
     n_ontology_concepts: Set[URIRef] = set()
-    for triple in graph.triples((None, NS_OWL.backwardCompatibleWith, None)):
-        assert isinstance(triple[0], URIRef)
-        assert isinstance(triple[2], URIRef)
-        n_ontology_concepts.add(triple[0])
-        n_ontology_concepts.add(triple[2])
-    for triple in graph.triples((None, NS_OWL.imports, None)):
-        assert isinstance(triple[0], URIRef)
-        assert isinstance(triple[2], URIRef)
-        n_ontology_concepts.add(triple[0])
-        n_ontology_concepts.add(triple[2])
-    for triple in graph.triples((None, NS_OWL.incompatibleWith, None)):
-        assert isinstance(triple[0], URIRef)
-        assert isinstance(triple[2], URIRef)
-        n_ontology_concepts.add(triple[0])
-        n_ontology_concepts.add(triple[2])
-    for triple in graph.triples((None, NS_OWL.priorVersion, None)):
-        assert isinstance(triple[0], URIRef)
-        assert isinstance(triple[2], URIRef)
-        n_ontology_concepts.add(triple[0])
-        n_ontology_concepts.add(triple[2])
-    for triple in graph.triples((None, NS_OWL.versionIRI, None)):
-        assert isinstance(triple[0], URIRef)
-        assert isinstance(triple[2], URIRef)
-        n_ontology_concepts.add(triple[0])
-        n_ontology_concepts.add(triple[2])
-    for triple in graph.triples((None, NS_OWL.versionInfo, None)):
-        assert isinstance(triple[0], URIRef)
-        n_ontology_concepts.add(triple[0])
-    for triple in graph.triples((None, NS_RDF.type, NS_OWL.Ontology)):
-        assert isinstance(triple[0], URIRef)
-        n_ontology_concepts.add(triple[0])
+    with open(args.inTxt, "r") as in_fh:
+        for line in in_fh:
+            cleaned_line = line.strip()
+            if cleaned_line == "":
+                continue
+            n_ontology_concepts.add(URIRef(cleaned_line))
+
     for n_ontology_concept in sorted(n_ontology_concepts):
-        ontology_concept_iri = n_ontology_concept
+        ontology_concept_iri = n_ontology_concept.toPython()
         if not ontology_concept_iri.startswith(args.ontology_base):
             continue
         ontology_url_path: str = ontology_concept_iri.split("ontology.org")[1]

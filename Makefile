@@ -179,6 +179,17 @@ clean:
 	@cd dependencies/CASE \
 	  && git checkout -- tests/examples
 
+current_ontology_iris.txt: \
+  .venv.done.log \
+  dependencies/CASE/tests/case_monolithic.ttl \
+  src/current_ontology_iris_txt.py
+	source venv/bin/activate \
+	  && python3 src/current_ontology_iris_txt.py \
+	    --ontology-base https://ontology.caseontology.org \
+	    _$@ \
+	    dependencies/CASE/tests/case_monolithic.ttl
+	mv _$@ $@
+
 dependencies/CASE/tests/case_monolithic.ttl: \
   .git_submodule_init.done.log
 	$(MAKE) \
@@ -190,12 +201,23 @@ dependencies/CASE/tests/case_monolithic.ttl: \
 	test -r $@
 	touch $@
 
+# Accumulate all ontology and version IRIs.
+ontology_iris_archive.txt: \
+  current_ontology_iris.txt
+	cat $< > __$@
+	test ! -r $@ \
+	  || cat $@ >> __$@
+	LC_ALL=C sort __$@ \
+	  | uniq > _$@
+	rm __$@
+	mv _$@ $@
+
 version_mappings_cache.json: \
-  .venv.done.log \
-  dependencies/CASE/tests/case_monolithic.ttl \
+  ontology_iris_archive.txt \
   src/map_entries_to_gendocs.py
 	source venv/bin/activate \
 	  && cd src \
 	    && python3 map_entries_to_gendocs.py \
 	      --ontology-base https://ontology.caseontology.org \
-	      $(top_srcdir)/dependencies/CASE/tests/case_monolithic.ttl
+	      $(top_srcdir)/dependencies/CASE/tests/case_monolithic.ttl \
+	      $(top_srcdir)/ontology_iris_archive.txt
