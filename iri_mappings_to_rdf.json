@@ -1,0 +1,8 @@
+{
+    "/case/case": "/case/case.rdf",
+    "/case/case/0.7.1": "/case/case/0.7.1.rdf",
+    "/case/investigation": "/case/investigation.rdf",
+    "/case/investigation/0.7.1": "/case/investigation/0.7.1.rdf",
+    "/case/vocabulary": "/case/vocabulary.rdf",
+    "/case/vocabulary/0.7.1": "/case/vocabulary/0.7.1.rdf"
+}
