@@ -88,8 +88,11 @@ def main() -> None:
     mappings: Dict[str, str] = dict()
 
     # With HTML requests, ontology-level IRIs will all map to the documentation root.
-    # NOTE: This currently includes past versions.  The documentation site does not currently serve rendered documentation for prior ontology versions.
     n_ontology_concepts: Set[URIRef] = set()
+
+    ontology_url_path: str
+
+    # NOTE: The archive currently includes all past version IRIs.  The documentation site does not currently serve rendered documentation for prior ontology versions.
     with open(args.inTxt, "r") as in_fh:
         for line in in_fh:
             cleaned_line = line.strip()
@@ -101,8 +104,18 @@ def main() -> None:
         ontology_concept_iri = n_ontology_concept.toPython()
         if not ontology_concept_iri.startswith(args.ontology_base):
             continue
-        ontology_url_path: str = ontology_concept_iri.split("ontology.org")[1]
+        ontology_url_path = ontology_concept_iri.split("ontology.org")[1]
         mappings[ontology_url_path] = "/documentation/index.html"
+
+    # Additionally, an unversioned ontology IRI ending in a slash should also map to the documentation root.
+    for triple in graph.triples((None, NS_RDF.type, NS_OWL.Ontology)):
+        if not isinstance(triple[0], URIRef):
+            continue
+        ontology_concept_iri = triple[0].toPython()
+        if not ontology_concept_iri.startswith(args.ontology_base):
+            continue
+        ontology_url_path: str = ontology_concept_iri.split("ontology.org")[1]
+        mappings[ontology_url_path + "/"] = "/documentation/index.html"
 
     # select class and property concepts from ontology -- dict(prefix : query)
     queries = dict()
