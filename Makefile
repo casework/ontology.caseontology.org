@@ -21,7 +21,9 @@ HOST_PREFIX ?= http://localhost
 
 all: \
   all-case \
-  iri_mappings_to_html.json
+  iri_mappings_to_html.json \
+  iri_mappings_to_rdf.json \
+  iri_mappings_to_ttl.json
 
 .PHONY: \
   all-case \
@@ -222,3 +224,25 @@ iri_mappings_to_html.json: \
 	      --ontology-base https://ontology.caseontology.org \
 	      $(top_srcdir)/dependencies/CASE/tests/case_monolithic.ttl \
 	      $(top_srcdir)/ontology_iris_archive.txt
+
+iri_mappings_to_rdf.json: \
+  ontology_iris_archive.txt \
+  src/map_iris_to_graph_file.py
+	source venv/bin/activate \
+	  && python3 src/map_iris_to_graph_file.py \
+	    --ontology-base https://ontology.caseontology.org \
+	    _$@ \
+	    application/rdf+xml \
+	    ontology_iris_archive.txt
+	mv _$@ $@
+
+iri_mappings_to_ttl.json: \
+  ontology_iris_archive.txt \
+  src/map_iris_to_graph_file.py
+	source venv/bin/activate \
+	  && python3 src/map_iris_to_graph_file.py \
+	    --ontology-base https://ontology.caseontology.org \
+	    _$@ \
+	    text/turtle \
+	    ontology_iris_archive.txt
+	mv _$@ $@
