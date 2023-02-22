@@ -6,7 +6,7 @@ import json
 app = Flask(__name__)
 
 # load the current version of the mapping cache
-with open('../version_mappings_cache.json', 'r') as fp:
+with open('../iri_mappings_to_html.json', 'r') as fp:
     mappings = json.load(fp)
 
 @app.route("/")

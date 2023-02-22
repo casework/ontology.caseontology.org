@@ -20,7 +20,8 @@ top_srcdir := $(shell pwd)
 HOST_PREFIX ?= http://localhost
 
 all: \
-  all-case
+  all-case \
+  iri_mappings_to_html.json
 
 .PHONY: \
   all-case \
@@ -212,7 +213,7 @@ ontology_iris_archive.txt: \
 	rm __$@
 	mv _$@ $@
 
-version_mappings_cache.json: \
+iri_mappings_to_html.json: \
   ontology_iris_archive.txt \
   src/map_entries_to_gendocs.py
 	source venv/bin/activate \

@@ -14,7 +14,7 @@ from typing import Dict, Set
 import rdflib.plugins.sparql
 from rdflib import OWL, RDF, URIRef
 
-CACHE_FILE = "../version_mappings_cache.json"
+CACHE_FILE = "../iri_mappings_to_html.json"
 
 NS_OWL = OWL
 NS_RDF = RDF
