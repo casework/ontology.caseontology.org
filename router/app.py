@@ -1,3 +1,5 @@
+import pathlib
+
 from flask import Flask, request, redirect, abort
 from datetime import datetime
 import string
@@ -5,8 +7,11 @@ import json
 
 app = Flask(__name__)
 
+srcdir = pathlib.Path(__file__).parent
+top_srcdir = srcdir / ".."
+
 # load the current version of the mapping cache
-with open('../iri_mappings_to_html.json', 'r') as fp:
+with (top_srcdir / 'iri_mappings_to_html.json').open('r') as fp:
     mappings = json.load(fp)
 
 @app.route("/")
