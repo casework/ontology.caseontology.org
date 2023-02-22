@@ -188,6 +188,7 @@ check-service:
 
 clean:
 	@$(MAKE) \
+	  CURRENT_RELEASE=$(CURRENT_RELEASE) \
 	  --directory case \
 	  clean
 	@rm -f .*.done.log
