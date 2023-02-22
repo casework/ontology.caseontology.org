@@ -1,0 +1,27 @@
+#!/usr/bin/make -f
+
+SHELL := /bin/bash
+srcdir := $(shell cd .. ; pwd)
+
+PY3 ?= python3
+
+all: \
+	deploy
+
+deploy: \
+	.venv
+
+.venv: \
+	requirements.txt
+		$(PY3) -m venv \
+			venv
+		source venv/bin/activate \
+			&& pip install \
+				--upgrade \
+				pip
+			source venv/bin/activate \
+					&& pip install \
+					--requirement requirements.txt
+clean:
+	rm -rf venv ||:
+	find . -type d -name __pycache__ -exec rm -r {} \+ ||:
