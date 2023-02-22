@@ -65,8 +65,9 @@ def create_symlinks(top_srcdir: str, symlinks: Dict[str, str]) -> None:
 def main() -> None:
     # parse arguments for ontology file we are preparing links for
     parser = argparse.ArgumentParser()
-    parser.add_argument('inTtl', type=str, help='ttl file to build sym-links off of')
     parser.add_argument('--debug', action="store_true")
+    parser.add_argument('--ontology-base', default="https://ontology.caseontology.org", help="Restrict mapped concepts to start with only this domain.")
+    parser.add_argument('inTtl', type=str, help='ttl file to build sym-links off of')
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
@@ -105,7 +106,7 @@ WHERE {
     # hold gendoc location, assoicated to symlinked path -- dict(gendocs-path : symlink)
     mappings: Dict[str, str] = dict()
 
-    iris_seen: Set[URIRef] = set()
+    n_concepts_seen: Set[URIRef] = set()
 
     # generate paths for symlink src/dst locations
     tally = 0
@@ -120,9 +121,17 @@ WHERE {
         for (row_no, row) in enumerate(graph.query(select_query_object)):
             if not isinstance(row[0], URIRef):
                 continue
-            tally = row_no + 1
             n_concept = row[0]
+
             concept_iri = row[0].toPython()
+            if not concept_iri.startswith(args.ontology_base):
+                continue
+
+            if n_concept in n_concepts_seen:
+                continue
+            n_concepts_seen.add(n_concept)
+            
+            tally = row_no + 1
 
             # determine URL path (file path, relative to service root within file system)
             # the split-point is the string in common to CASE's and UCO's IRIs.

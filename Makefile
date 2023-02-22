@@ -13,6 +13,8 @@
 
 SHELL := /bin/bash
 
+top_srcdir := $(shell pwd)
+
 # Use HOST_PREFIX to test the deployment at the specified host.
 # Syntax note - there is no trailing slash.
 HOST_PREFIX ?= http://localhost
@@ -187,3 +189,13 @@ dependencies/CASE/tests/case_monolithic.ttl: \
 	# Guarantee file is built and timestamp is up to date.
 	test -r $@
 	touch $@
+
+version_mappings_cache.json: \
+  .venv.done.log \
+  dependencies/CASE/tests/case_monolithic.ttl \
+  src/map_entries_to_gendocs.py
+	source venv/bin/activate \
+	  && cd src \
+	    && python3 map_entries_to_gendocs.py \
+	      --ontology-base https://ontology.caseontology.org \
+	      $(top_srcdir)/dependencies/CASE/tests/case_monolithic.ttl
