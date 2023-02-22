@@ -28,6 +28,7 @@ all: \
   iri_mappings_to_ttl.json
 
 .PHONY: \
+  check-pytest \
   check-service
 
 .case.done.log: \
@@ -90,6 +91,12 @@ all: \
 	    --editable \
 	    dependencies/Ontospy[FULL]
 	touch $@
+
+check-pytest: \
+  .venv.done.log
+	source venv/bin/activate \
+	  && pytest \
+	    --ignore dependencies
 
 # Test matrix:
 # Concept broad type: ontology, class, or property
