@@ -9,8 +9,10 @@ import argparse
 import logging
 import json
 import os
-from typing import Dict
+from typing import Dict, Set
+
 import rdflib.plugins.sparql
+from rdflib import URIRef
 
 CACHE_FILE = "../version_mappings_cache.json"
 
@@ -78,29 +80,60 @@ def main() -> None:
 
     # select class and property concepts from ontology -- dict(prefix : query)
     queries = dict()
-    queries["class"] = "SELECT ?nConcept WHERE { ?nConcept a owl:Class . }"
-    queries["prop"] = "SELECT ?nConcept WHERE {{ ?nConcept a owl:DatatypeProperty . } UNION { ?nConcept a owl:ObjectProperty . }}"
+    queries["class"] = """\
+SELECT ?nConcept
+WHERE {
+  ?nConcept a owl:Class .
+}"""
+    queries["prop"] = """\
+SELECT ?nConcept
+WHERE {
+  { ?nConcept a owl:DatatypeProperty . }
+  UNION
+  { ?nConcept a owl:ObjectProperty . }
+}"""
+    queries["shape"] = """\
+SELECT ?nConcept
+WHERE {
+  { ?nConcept a sh:NodeShape . }
+  UNION
+  { ?nConcept a sh:PropertyShape . }
+  UNION
+  { ?nConcept a sh:Shape . }
+}"""
 
     # hold gendoc location, assoicated to symlinked path -- dict(gendocs-path : symlink)
     mappings: Dict[str, str] = dict()
 
+    iris_seen: Set[URIRef] = set()
+
     # generate paths for symlink src/dst locations
     tally = 0
-    for prefix, query in queries.items():
+    # Iterate over queries dictionary in this prefix order, in order to avoid conflicts between classes and node shapes.
+    for prefix in [
+        "class",
+        "prop",
+        "shape"
+    ]:
+        query = queries[prefix]
         select_query_object = rdflib.plugins.sparql.processor.prepareQuery(query, initNs=nsdict)
         for (row_no, row) in enumerate(graph.query(select_query_object)):
+            if not isinstance(row[0], URIRef):
+                continue
             tally = row_no + 1
+            n_concept = row[0]
             concept_iri = row[0].toPython()
 
             # determine URL path (file path, relative to service root within file system)
             # the split-point is the string in common to CASE's and UCO's IRIs.
-            url_path = concept_iri.split("ontology.org/")[1] + ""
+            url_path: str = concept_iri.split("ontology.org")[1]
 
             # determine path to symlink target (gendocs HTML file), relative to basename of URL path
-            iri_parts = concept_iri.split('/')
-            gendocs_target = f"../documentation/{prefix}-{iri_parts[-2]}{iri_parts[-1].lower()}.html"
+            iri_parts = concept_iri.split("/")
+            gendocs_target = f"/documentation/{prefix}-{iri_parts[-2]}{iri_parts[-1].lower()}.html"
 
-            # format gendoc -> symlink (src, dst) combos
+            # format mapping as absolute request path -> absolute path to documentation HTML;
+            # "absolute" is relative to top_srcdir
             mappings[url_path] = gendocs_target
 
     if tally == 0:
