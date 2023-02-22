@@ -31,7 +31,7 @@ def write_cache(mappings: Dict[str, str]) -> bool:
 
     try:
         with open(CACHE_FILE, 'w+') as wp:
-            json.dump(mappings, wp, indent=4)
+            json.dump(mappings, wp, indent=4, sort_keys=True)
             print(f'Wrote cache to {CACHE_FILE}')
         return True
     except Exception as e:
