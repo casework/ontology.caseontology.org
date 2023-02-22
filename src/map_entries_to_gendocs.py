@@ -12,9 +12,13 @@ import os
 from typing import Dict, Set
 
 import rdflib.plugins.sparql
-from rdflib import URIRef
+from rdflib import OWL, RDF, URIRef
 
 CACHE_FILE = "../version_mappings_cache.json"
+
+NS_OWL = OWL
+NS_RDF = RDF
+
 
 def debug_printlinks(symlinks: Dict[str, str]) -> None:
     """Outputs the contents of the symlinks dict, for debugging only."""
@@ -79,6 +83,51 @@ def main() -> None:
     # Inherit prefixes defined in input context dictionary.
     nsdict = {k:v for (k,v) in graph.namespace_manager.namespaces()}
 
+    # hold gendoc location, associated to symlinked path -- dict(gendocs-path : symlink)
+    mappings: Dict[str, str] = dict()
+
+    # Find all ontology-level IRIs and version IRIs.
+    # (These IRIs are for the OWL ontologies and their versions, not for classes, shapes, etc.)
+    # With HTML requests, these will all map to the documentation root.
+    n_ontology_concepts: Set[URIRef] = set()
+    for triple in graph.triples((None, NS_OWL.backwardCompatibleWith, None)):
+        assert isinstance(triple[0], URIRef)
+        assert isinstance(triple[2], URIRef)
+        n_ontology_concepts.add(triple[0])
+        n_ontology_concepts.add(triple[2])
+    for triple in graph.triples((None, NS_OWL.imports, None)):
+        assert isinstance(triple[0], URIRef)
+        assert isinstance(triple[2], URIRef)
+        n_ontology_concepts.add(triple[0])
+        n_ontology_concepts.add(triple[2])
+    for triple in graph.triples((None, NS_OWL.incompatibleWith, None)):
+        assert isinstance(triple[0], URIRef)
+        assert isinstance(triple[2], URIRef)
+        n_ontology_concepts.add(triple[0])
+        n_ontology_concepts.add(triple[2])
+    for triple in graph.triples((None, NS_OWL.priorVersion, None)):
+        assert isinstance(triple[0], URIRef)
+        assert isinstance(triple[2], URIRef)
+        n_ontology_concepts.add(triple[0])
+        n_ontology_concepts.add(triple[2])
+    for triple in graph.triples((None, NS_OWL.versionIRI, None)):
+        assert isinstance(triple[0], URIRef)
+        assert isinstance(triple[2], URIRef)
+        n_ontology_concepts.add(triple[0])
+        n_ontology_concepts.add(triple[2])
+    for triple in graph.triples((None, NS_OWL.versionInfo, None)):
+        assert isinstance(triple[0], URIRef)
+        n_ontology_concepts.add(triple[0])
+    for triple in graph.triples((None, NS_RDF.type, NS_OWL.Ontology)):
+        assert isinstance(triple[0], URIRef)
+        n_ontology_concepts.add(triple[0])
+    for n_ontology_concept in sorted(n_ontology_concepts):
+        ontology_concept_iri = n_ontology_concept
+        if not ontology_concept_iri.startswith(args.ontology_base):
+            continue
+        ontology_url_path: str = ontology_concept_iri.split("ontology.org")[1]
+        mappings[ontology_url_path] = "/documentation/index.html"
+
     # select class and property concepts from ontology -- dict(prefix : query)
     queries = dict()
     queries["class"] = """\
@@ -102,9 +151,6 @@ WHERE {
   UNION
   { ?nConcept a sh:Shape . }
 }"""
-
-    # hold gendoc location, assoicated to symlinked path -- dict(gendocs-path : symlink)
-    mappings: Dict[str, str] = dict()
 
     n_concepts_seen: Set[URIRef] = set()
 
