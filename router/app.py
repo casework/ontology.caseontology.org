@@ -1,6 +1,6 @@
 import pathlib
 
-from flask import Flask, request, redirect, abort
+from flask import Flask, request, redirect, abort, send_file
 from datetime import datetime
 import string
 import json
@@ -35,32 +35,46 @@ def root():
 @app.route("/<ontology>/<path:target>", methods=['GET'])
 def router(ontology: str, target: str):
     '''Routes data through the file system to the appropriate documentation'''
+    content_type = request.headers.get('Accept')
 
-    # TODO: based on content_type, route to specific html/ttl/rdf
-    content_type = requests.headers.get('Content-Type')
+    # override content_type with extensions from the target for restful lookups
+    file_request = False
+    if 'ttl' in target or 'rdf' in target:
+        file_request = True
+        target_parts = target.rsplit(".", 1)
+        target = target_parts[0]
+        content_type = 'turtle' if target_parts[1] == 'ttl' else 'rdf'
 
-    # check for HTML matches first
-    if f"{ontology}/{target}" in html:
-        location = html[f"{ontology}/{target}"]
+    # check the headers for 'rdf' in the content-type
+    if content_type is not None and 'rdf' in content_type:
+        if f"/{ontology}/{target}" in rdf:
+            location = rdf[f"/{ontology}/{target}"]
+            if file_request:
+                return send_file(".." + rdf[f"/{ontology}/{target}"], as_attachment=True)
+
+            if request.is_secure:
+                return redirect(f'https://{request.host}{location}', 301)
+            else:
+                return redirect(f'http://{request.host}{location}', 301)
+
+    # check the headers for 'turtle' in the content type
+    if content_type is not None and 'turtle' in content_type or 'ttl' in content_type:
+        if f"/{ontology}/{target}" in ttl:
+            location = ttl[f"/{ontology}/{target}"]
+            if file_request:
+                return send_file(".." + ttl[f"/{ontology}/{target}"], as_attachment=True)
+
+            if request.is_secure:
+                return redirect(f'https://{request.host}{location}', 301)
+            else:
+                return redirect(f'http://{request.host}{location}', 301)
+
+    # blanket check mappings for HTML
+    if f"/{ontology}/{target}" in html:
+        location = html[f"/{ontology}/{target}"]
         if request.is_secure:
-            return redirect(f'https://{request.host}/{location}', 301)
+            return redirect(f'https://{request.host}{location}', 301)
         else:
-            return redirect(f'http://{request.host}/{location}', 301)
+            return redirect(f'http://{request.host}{location}', 301)
 
-    # check for RDF matches second
-    if f"{ontology}/{target}" in rdf:
-        location = rdf[f"{ontology}/{target}"]
-        if request.is_secure:
-            return redirect(f'https://{request.host}/{location}', 301)
-        else:
-            return redirect(f'http://{request.host}/{location}', 301)
-
-    # finally, check for TTl matches
-    if f"{ontology}/{target}" in ttl:
-        location = ttl[f"{ontology}/{target}"]
-        if request.is_secure:
-            return redirect(f'https://{request.host}/{location}', 301)
-        else:
-            return redirect(f'http://{request.host}/{location}', 301)
-
-    abort(401)
+    abort(404)
