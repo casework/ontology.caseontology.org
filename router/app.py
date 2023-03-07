@@ -58,16 +58,17 @@ def router(ontology: str, target: str):
                 return redirect(f'http://{request.host}{location}', 301)
 
     # check the headers for 'turtle' in the content type
-    if content_type is not None and 'turtle' in content_type or 'ttl' in content_type:
-        if f"/{ontology}/{target}" in ttl:
-            location = ttl[f"/{ontology}/{target}"]
-            if file_request:
-                return send_file(".." + ttl[f"/{ontology}/{target}"], as_attachment=True)
+    if content_type is not None:
+        if 'turtle' in content_type or 'ttl' in content_type:
+            if f"/{ontology}/{target}" in ttl:
+                location = ttl[f"/{ontology}/{target}"]
+                if file_request:
+                    return send_file(".." + ttl[f"/{ontology}/{target}"], as_attachment=True)
 
-            if request.is_secure:
-                return redirect(f'https://{request.host}{location}', 301)
-            else:
-                return redirect(f'http://{request.host}{location}', 301)
+                if request.is_secure:
+                    return redirect(f'https://{request.host}{location}', 301)
+                else:
+                    return redirect(f'http://{request.host}{location}', 301)
 
     # blanket check mappings for HTML
     if f"/{ontology}/{target}" in html:
