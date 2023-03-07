@@ -14,15 +14,15 @@ deploy: \
 .venv.done.log: \
   requirements.txt
 	rm -rf venv
-		$(PY3) -m venv \
-			venv
-		source venv/bin/activate \
-			&& pip install \
-				--upgrade \
-				pip
-			source venv/bin/activate \
-					&& pip install \
-					--requirement requirements.txt
+	$(PY3) -m venv \
+		venv
+	source venv/bin/activate \
+		&& pip install \
+			--upgrade \
+			pip
+	source venv/bin/activate \
+		&& pip install \
+			--requirement requirements.txt
 	touch $@
 
 clean:
