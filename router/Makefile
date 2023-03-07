@@ -6,13 +6,13 @@ srcdir := $(shell cd .. ; pwd)
 PY3 ?= python3
 
 all: \
-	deploy
+  deploy
 
 deploy: \
-	.venv
+  .venv
 
 .venv: \
-	requirements.txt
+  requirements.txt
 		$(PY3) -m venv \
 			venv
 		source venv/bin/activate \
