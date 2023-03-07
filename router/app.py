@@ -28,9 +28,9 @@ def root():
 
     # redirect when we find a match based on SSL
     if request.is_secure:
-        return redirect(f'https://{request.host}/case/documentation/index.html', 301)
+        return redirect(f'https://{request.host}/documentation/index.html', 301)
     else:
-        return redirect(f'http://{request.host}/case/documentation/index.html', 301)
+        return redirect(f'http://{request.host}/documentation/index.html', 301)
 
 @app.route("/<ontology>/<path:target>", methods=['GET'])
 def router(ontology: str, target: str):
