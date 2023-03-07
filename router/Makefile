@@ -9,9 +9,9 @@ all: \
   deploy
 
 deploy: \
-  .venv
+  .venv.done.log
 
-.venv: \
+.venv.done.log: \
   requirements.txt
 		$(PY3) -m venv \
 			venv
@@ -22,6 +22,8 @@ deploy: \
 			source venv/bin/activate \
 					&& pip install \
 					--requirement requirements.txt
+	touch $@
+
 clean:
 	rm -rf venv ||:
 	find . -type d -name __pycache__ -exec rm -r {} \+ ||:
