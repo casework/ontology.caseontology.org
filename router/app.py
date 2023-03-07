@@ -1,6 +1,7 @@
 import pathlib
 
 from flask import Flask, request, redirect, abort, send_file
+from werkzeug.wrappers import Response as BaseResponse
 from datetime import datetime
 import string
 import json
@@ -23,7 +24,7 @@ with (top_srcdir / 'iri_mappings_to_ttl.json').open('r') as fp:
     ttl = json.load(fp)
 
 @app.route("/")
-def root():
+def root() -> BaseResponse:
     '''Routes the root '/' of the host to the index of the docs'''
 
     # redirect when we find a match based on SSL
@@ -33,7 +34,7 @@ def root():
         return redirect(f'http://{request.host}/documentation/index.html', 301)
 
 @app.route("/<ontology>/<path:target>", methods=['GET'])
-def router(ontology: str, target: str):
+def router(ontology: str, target: str) -> BaseResponse:
     '''Routes data through the file system to the appropriate documentation'''
     content_type = request.headers.get('Accept')
 
