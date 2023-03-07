@@ -135,7 +135,7 @@ check-service:
 	  --header 'Accept: text/html' \
 	  --output-document _$@ \
 	  $(HOST_PREFIX)/case/investigation/ProvenanceRecord
-	diff _$@ case/investigation/ProvenanceRecord.html
+	diff _$@ documentation/class-investigationprovenancerecord.html
 	rm _$@
 #	#TODO - Turtle breakout needs to be written.
 #	wget \
@@ -161,7 +161,7 @@ check-service:
 	  --header 'Accept: text/html' \
 	  --output-document _$@ \
 	  $(HOST_PREFIX)/case/investigation/exhibitNumber
-	diff _$@ case/investigation/exhibitNumber.html
+	diff _$@ documentation/prop-investigationexhibitnumber.html
 	rm _$@
 #	#TODO - Turtle breakout needs to be written.
 #	wget \
@@ -180,15 +180,15 @@ check-service:
 	# Confirm documentation index is reachable.
 	wget \
 	  --output-document _$@ \
-	  $(HOST_PREFIX)/case/documentation/
-	diff _$@ case/documentation/index.html
+	  $(HOST_PREFIX)/documentation/
+	diff _$@ documentation/index.html
 	rm _$@
 	# Confirm HTML index for non-umbrella namespaces are redirected to umbrella documentation index.
 	wget \
 	  --header 'Accept: text/html' \
 	  --output-document _$@ \
 	  $(HOST_PREFIX)/case/investigation/
-	diff _$@ case/documentation/index.html
+	diff _$@ documentation/index.html
 	rm _$@
 	@echo >&2
 	@echo "INFO:Makefile:Service tests pass!" >&2
