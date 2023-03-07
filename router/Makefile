@@ -13,6 +13,7 @@ deploy: \
 
 .venv.done.log: \
   requirements.txt
+	rm -rf venv
 		$(PY3) -m venv \
 			venv
 		source venv/bin/activate \
