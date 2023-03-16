@@ -51,10 +51,10 @@ $ sudo apt-get update
 $ sudo apt-get -y upgrade
 ```
 
-Then, install Nginx on the server:
+Then, install Nginx on the server, and `python3-venv` if the server's operating system is Ubuntu:
 
 ```bash
-$ sudo apt-get install nginx
+$ sudo apt-get install nginx python3-venv
 ```
 
 Create a directory where the CASE autodocs repository will live, and a dedicated system user:
@@ -71,20 +71,22 @@ Use the new system user to clone this repository on the machine, you will need t
 
 ```bash
 $ sudo su casedocs -s /bin/bash
-$ cd /srv/http/ontology.caseontology.org ; git init
+$ cd /srv/http/ontology.caseontology.org
+$ git init
 $ git remote add origin https://github.com/casework/ontology.caseontology.org.git
-$ git fetch && git checkout main
+$ git fetch
+$ git checkout main
 ```
 
+Change directories to the `router/` directory, and build the flask router:
 
-Follow the "General Directions" for building the documentation via gendocs, then proceed to change directories to the `router/` directory, and build the flask router seperately:
 ```bash
 $ cd router/
-$ make clean && make
-# finally, we can exit back to the root user
+$ make clean
+$ make
+$ # (Work as the 'casedocs' user is concluded.)
 $ exit
 ```
-
 
 Copy the `casedocs.service` file so that systemctl can use it, reload, and enable the service:
 
