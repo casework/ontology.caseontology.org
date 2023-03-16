@@ -174,6 +174,27 @@ $ sudo vi /etc/hosts
 ```
 
 
+## Testing
+
+To test the deployment, run the **Makefile** to ensure expected URL behaviors and content types.  Unparameterized, this call will confirm files retrieved from `localhost` content-match expected files in the source tree:
+
+```bash
+$ make check-service
+```
+
+If you have set the `server_name` on nginx as anything besides `localhost`, you will want to supply this prefix with the `HOST_PREFIX` parameter.  For example, to test the production service, run:
+
+```bash
+$ make HOST_PREFIX=https://ontology.caseontology.org check-service
+```
+
+As another example, if you have a local deployment at `https://documentation.intranet.example.org/`, run:
+
+```bash
+$ make HOST_PREFIX=https://documentation.intranet.example.org check-service
+```
+
+
 ## Debugging
 
 There are a variety of errors that you can face, but we are going to address the most common ones.
@@ -197,25 +218,4 @@ $ sudo chown -R casedocs:casedocs /srv/http/ontology.caseontology.org
 ```bash
 $ sudo tail -f /var/log/nginx/error.log
 $ journalctl
-```
-
-
-## Testing
-
-To test the deployment, run the **Makefile** to ensure expected URL behaviors and content types.  Unparameterized, this call will confirm files retrieved from `localhost` content-match expected files in the source tree:
-
-```bash
-$ make check-service
-```
-
-If you have set the `server_name` on nginx as anything besides `localhost`, you will want to supply this prefix with the `HOST_PREFIX` parameter.  For example, to test the production service, run:
-
-```bash
-$ make HOST_PREFIX=https://ontology.caseontology.org check-service
-```
-
-As another example, if you have a local deployment at `https://documentation.intranet.example.org/`, run:
-
-```bash
-$ make HOST_PREFIX=https://documentation.intranet.example.org check-service
 ```
