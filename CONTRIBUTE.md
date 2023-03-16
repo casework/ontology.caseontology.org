@@ -165,7 +165,7 @@ $ sudo service nginx status
 ```
 
 
-#### Optional Localhost
+## Optional Localhost
 
 If you are running the deployment on a system that does not access the internet, or you wish to only provide the documentation locally, you may want to add an entry to your hosts file.
 
@@ -174,8 +174,7 @@ $ sudo vi /etc/hosts
 ```
 
 
-
-### Debugging
+## Debugging
 
 There are a variety of errors that you can face, but we are going to address the most common ones.
 
@@ -191,9 +190,9 @@ $ sudo chown -R casedocs:casedocs /srv/http/ontology.caseontology.org
 - Ensure that the paths defined in the systemctl file (`/etc/systemd/system`) are correctly pointing to the router
 - Check the nginx configuration file (`/etc/nginx/sites-enabled/`) to ensure that the pathing to the documentation is correct
 - Ensure that `default` config for nginx is deleted (no longer in `/etc/nginx/sites-enabled/*`)
-- Check that the file actually exists! `tail -f /var/log/nginx/error.log`
+- Check that the requested file actually exists! `tail -f /var/log/nginx/error.log`
 
-**500** - For any 500 errors, the server may be mis-configured, you can check the following areas to see if there is relevant outputs. This is commonly due to `/etc/apache/apache.conf` being mis-configured, or a typo in one of the sites which are enabled.
+**500** - For any 500 errors, the server may be mis-configured, you can check the following areas to see if there is relevant outputs. This is commonly due to a typo (perhaps an updated path?) in one of the sites which are enabled.
 
 ```bash
 $ sudo tail -f /var/log/nginx/error.log
@@ -201,15 +200,15 @@ $ journalctl
 ```
 
 
-### Testing
+## Testing
 
-To test the deployment, run the **Makefile** to ensure expected URL behaviors and content types.
+To test the deployment, run the **Makefile** to ensure expected URL behaviors and content types.  Unparameterized, this call will confirm files retrieved from `localhost` content-match expected files in the source tree:
 
 ```bash
 $ make check-service
 ```
 
-If you have set the VirtualHost on apache as anything besides `localhost`, you will want to supply this prefix with the `HOST_PREFIX` parameter.  For example, to test the production service, run:
+If you have set the `server_name` on nginx as anything besides `localhost`, you will want to supply this prefix with the `HOST_PREFIX` parameter.  For example, to test the production service, run:
 
 ```bash
 $ make HOST_PREFIX=https://ontology.caseontology.org check-service
