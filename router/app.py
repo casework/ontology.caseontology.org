@@ -1,5 +1,11 @@
-import pathlib
+#!/usr/bin/env python3
 
+# NOTICE
+# This software was produced for the U.S. Government under contract FA8702-22-C-0001,
+# and is subject to the Rights in Data-General Clause 52.227-14, Alt. IV (DEC 2007)
+# ©2021 The MITRE Corporation. All Rights Reserved.
+
+import pathlib
 from flask import Flask, request, redirect, abort, send_file
 from werkzeug.wrappers import Response as BaseResponse
 from datetime import datetime
