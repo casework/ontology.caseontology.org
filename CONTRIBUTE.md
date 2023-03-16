@@ -91,10 +91,11 @@ $ exit
 Copy the `casedocs.service` file so that systemctl can use it, reload, and enable the service:
 
 ```bash
-$ sudo cp /srv/http/ontology.caseontology.org/router/casedocs.service /etc/systemd/system/
+$ cd /etc/systemd/system
+$ sudo ln -s /srv/http/ontology.caseontology.org/router/casedocs.service
 $ sudo systemctl daemon-reload
 $ sudo systemctl enable casedocs.service
-# finally, start the flask router and check the status of it
+$ # Start the flask router and check the status of it
 $ sudo service casedocs start
 $ sudo service casedocs status
 ```
