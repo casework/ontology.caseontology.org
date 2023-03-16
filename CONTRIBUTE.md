@@ -117,7 +117,7 @@ $ # (to get the IP information)
 $ ip a s
 ```
 
-To modify the nginx configuration file and add a hostname, add the following line as follows:
+To modify the nginx configuration file and add a hostname, change the `server_name` line as follows:
 
 ```patch
  server {
@@ -142,10 +142,26 @@ To modify the nginx configuration file and add a hostname, add the following lin
 
 ### Updating existing deployment
 
+To refresh served files (i.e. RDF-XML, Turtle, HTML and HTML-supporting files), these are the only steps that need to be run:
+
 ```bash
 $ sudo su casedocs -s /bin/bash
 $ cd /srv/http/ontology.caseontology.org
 $ git pull
+$ exit
+```
+
+If there were no revisions under `router/`, the update process is complete.
+
+If there are revisions to `router/case.nginx.conf` or `router/casedocs.service`, and those files are soft-linked under `/etc`, these commands will restart and reload web service.  If the files were not soft-linked, review the diffs and apply the same changes to the copied files under `/etc`.
+
+```bash
+$ sudo systemctl daemon-reload
+$ sudo service casedocs restart
+$ sudo service casedocs status
+$ sudo service nginx configtest
+$ sudo service nginx restart
+$ sudo service nginx status
 ```
 
 
