@@ -40,7 +40,7 @@ After a new ontology documentation state has been pushed to GitHub, follow these
 For the deployment of the documentation, we assume this repository is cloned to a Linux server, becoming the directory `/srv/http/ontology.caseontology.org/`. The nginx configuration file and casedocs systemctl service file are pathed to this directory by default.
 
 
-### Configuration
+### Initial configuration
 
 To deploy, the system will need to have **Nginx** installed and this repository cloned on it. We will use a simple **flask** router and a series of version-specific mapping files to route traffic to the proper documentation pages. This `CONTRIBUTE.md` page will outline installing **Nginx** and utilizing the **Makefile** to test the setup. All commands will assume the deployment system is a Debian-based system *(such as Ubuntu)*.
 
@@ -100,15 +100,15 @@ $ sudo service casedocs start
 $ sudo service casedocs status
 ```
 
-
 Assuming that the casedocs service starts successfully, you can proceed to move the nginx configuration file to the `sites-enabled` directory and remove the default file:
+
 ```bash
-$ sudo cp /srv/http/ontology.caseontology.org/router/case.nginx.conf /etc/nginx/sites-enabled/
-$ sudo rm /etc/nginx/sites-enabled/default
+$ cd /etc/nginx/sites-enabled
+$ sudo ln -s /srv/http/ontology.caseontology.org/router/case.nginx.conf
+$ sudo rm default
 $ sudo service nginx configtest
 $ sudo service nginx restart
 ```
-
 
 You should now be able to navigate to the IP address of your system and see the documentation live:
 ```bash
@@ -123,7 +123,7 @@ server {
     server_name mywebsite.com;
 
     location /documentation {
-        root /srv/ontology.caseontology.org;
+        root /srv/http/ontology.caseontology.org;
         try_files $uri $uri/ /index.html =404;
     }
 
@@ -136,6 +136,14 @@ server {
 }
 ```
 
+
+### Updating existing deployment
+
+```bash
+$ sudo su casedocs -s /bin/bash
+$ cd /srv/http/ontology.caseontology.org
+$ git pull
+```
 
 
 #### Optional Localhost
