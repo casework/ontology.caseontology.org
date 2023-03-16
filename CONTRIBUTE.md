@@ -88,7 +88,7 @@ $ # (Work as the 'casedocs' user is concluded.)
 $ exit
 ```
 
-Copy the `casedocs.service` file so that systemctl can use it, reload, and enable the service:
+Link the `casedocs.service` file so that systemctl can use it, reload, and enable the service.  *Note:* If this deployment expects to modify the service file, e.g. to change the `User` line, it should be copied (`cp`) instead of soft-linked as documented.
 
 ```bash
 $ cd /etc/systemd/system
@@ -100,7 +100,7 @@ $ sudo service casedocs start
 $ sudo service casedocs status
 ```
 
-Assuming that the casedocs service starts successfully, you can proceed to move the nginx configuration file to the `sites-enabled` directory and remove the default file:
+Assuming that the casedocs service starts successfully, you can proceed to copy the nginx configuration file to the `sites-enabled` directory and remove the default file.  *Note:* Again, if this deployment expects to adapt the nginx configuration file, e.g. to change the server name, it should be copied instead of soft-linked as documented.
 
 ```bash
 $ cd /etc/nginx/sites-enabled
@@ -111,29 +111,32 @@ $ sudo service nginx restart
 ```
 
 You should now be able to navigate to the IP address of your system and see the documentation live:
+
 ```bash
-# to get the IP information
+$ # (to get the IP information)
 $ ip a s
 ```
 
 To modify the nginx configuration file and add a hostname, add the following line as follows:
-```shell
-server {
-    listen 80;
-    server_name mywebsite.com;
 
-    location /documentation {
-        root /srv/http/ontology.caseontology.org;
-        try_files $uri $uri/ /index.html =404;
-    }
-
-    location / {
-        proxy_pass http://127.0.0.1:5000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    }
-}
+```patch
+ server {
+     listen 80;
+-    server_name ontology.caseontology.org;
++    server_name mywebsite.com;
+ 
+     location /documentation {
+         root /srv/http/ontology.caseontology.org;
+         try_files $uri $uri/ /index.html =404;
+     }
+ 
+     location / {
+         proxy_pass http://127.0.0.1:5000;
+         proxy_set_header Host $host;
+         proxy_set_header X-Real-IP $remote_addr;
+         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+     }
+ }
 ```
 
 
