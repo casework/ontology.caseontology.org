@@ -10,7 +10,7 @@ The intended audience for this section is documentation maintainers.
 
 ### Warnings
 
-The documentation generation must be carried out on a case-sensitive file system.  (macOS's default file system deployment is case-insensitive.)
+The documentation generation must be carried out on a case-sensitive file system. (macOS's default file system deployment is case-insensitive.)
 
 **Do not** commit changes under the `/case` directory on a case-insensitive file system.  Conflicts due to upper-vs.-lower casing will create erroneous symlink references.  Be aware that changes will be present on a fresh `git clone` in a case-insensitive file system.
 
@@ -31,12 +31,10 @@ When a new ontology release is created, follow these steps:
 
 ## Directions for deployment of this repository as a documentation service
 
-For the deployment of the documentation, we assume this repository is cloned to a Linux server, becoming the directory `/srv/http/case-docs/public/`.  If you clone it to another directory, ensure that any commands which tell you to alter the permissions to the mentioned directory or configuration files that use it are updated.
-
+For the deployment of the documentation, we assume this repository is cloned to a Linux server, becoming the directory `/srv/http/ontology.caseontology.org/`. The nginx configuration file and casedocs systemctl service file are pathed to this directory by default.
 
 ### Configuration
-To deploy, the system will need to have **Apache2** installed and this repository cloned on it. We will use  *Apache2's VirtualHost* feature and *mod_rewrite* extension to route traffic to the proper documentation pages. This CONTRIBUTE.md page will outline installing **Apache2** and utilizing the **Makefile** to test the setup. All commands will assume the deployment system is a debian-based system *(such as Ubuntu)*.
-
+To deploy, the system will need to have **Nginx** installed and this repository cloned on it. We will use a simple **flask** router and a a series of version-specific mapping files to route traffic to the proper documentation pages. This CONTRIBUTE.md page will outline installing **Nginx** and utilizing the **Makefile** to test the setup. All commands will assume the deployment system is a debian-based system *(such as Ubuntu)*.
 
 
 First, update the package repositories and update the system:
@@ -46,76 +44,85 @@ $ sudo apt-get update
 $ sudo apt-get -y upgrade
 ```
 
-Then, install Apache2 on the server:
+
+Then, install Nginx on the server:
 
 ```bash
-$ sudo apt-get install apache2
+$ sudo apt-get install nginx
 ```
 
 
-
-Once Apache2 is installed, we are going to want to enable *mod_rewrite* and disable the default website that is displayed at *localhost*
+Create a directory where the CASE autodocs repository will live, and a system user:
 
 ```bash
-# enable mod_rewrite, without manually editing /etc/apache/apache2.conf
-$ sudo a2enmod rewrite
-# disable the default website
-$ sudo a2dissite 000-default.conf
-# finally, restart the apache service
-$ sudo service apache2 restart
+$ sudo mkdir -p /srv/http/ontology.caseontology.org
+$ sudo useradd -s /usr/sbin/nologin -r -M -d /srv/http/ontology.caseontology.org casedocs
 ```
 
 
-
-We can confirm that *mod_rewrite* is running:
-
+Use the system user to clone this repository on the machine, you will need to initalize a repository in the home directory, to be able to pull to the non-empty target:
 ```bash
-$ apache2ctl -M | grep rewrite
-```
-The command should provide output, otherwise *mod_rewrite* is not running on the system.
-
-
-
-Now that we have enabled *mod_rewrite*, we can create the *VirtualHost* for the documentation website:
-
-```bash
-$ sudo vi /etc/apache2/sites-available/case-docs.conf
+$ sudo su casedocs -s /bin/bash
+$ cd /srv/http/ontology.caseontology.org; git init
+$ git remote add origin git@github.com:casework/ontology.caseontology.org.git
+$ git pull && git checkout main
 ```
 
-Inside this file, we can include the following configuration:
 
+Follow the "General Directions" for building the documentation via gendocs, then proceed to change directories to the `router/` directory, and build the flask router seperately:
+```bash
+$ cd router/
+$ make clean && make
+# finally, we can exit back to the root user
+$ exit
+```
+
+
+Copy the `casedocs.service` file so that systemctl can use it, reload, and enable the service:
+
+```bash
+$ sudo cp /srv/http/ontology.caseontology.org/router/casedocs.service /etc/systemd/system/
+$ sudo systemctl daemon-reload
+$ sudo systemctl enable casedocs.service
+# finally, start the flask router and check the status of it
+$ sudo service casedocs start
+$ sudo service casedocs status
+```
+
+
+Assuming that the casedocs service starts successfully, you can proceed to move the nginx configuration file to the `sites-enabled` directory and remove the default file:
+```bash
+$ sudo cp /srv/http/ontology.caseontology.org/router/case.nginx.conf /etc/nginx/sites-enabled/
+$ sudo rm /etc/nginx/sites-enabled/default
+$ sudo service nginx configtest
+$ sudo service nginx restart
+```
+
+
+You should now be able to navigate to the IP address of your system and see the documentation live:
+```bash
+# to get the IP information
+$ ip a s
+```
+
+To modify the nginx configuration file and add a hostname, add the following line as follows:
 ```shell
-<VirtualHost *:80>
-		# replace the ServerName with your domain
-    ServerName example.com
-    
-    # replace the DocumentRoot with the path to the repo
-    DocumentRoot /path/to/files
-    
-    ServerAdmin webmaster@localhost
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
+server {
+    listen 80;
+    server_name mywebsite.com;
 
-		# replace the path in the <Directory> directive with the path to the repo
-    <Directory /path/to/files>
-      Options Indexes FollowSymLinks
-      AllowOverride All
-      Require all granted
-    </Directory>
-</VirtualHost>
-```
+    location /documentation {
+        root /srv/ontology.caseontology.org;
+        try_files $uri $uri/ /index.html =404;
+    }
 
-(If you use an alternate mechanism to a text editor to move the configuration file into place, after it is moved the file ownership should be `root:root`.)
-
-This configuration will define a `ServerName`, which is the domain name that the server will listen for and the `DocumentRoot`, which is the path to the files. You will also need to modify the path in the `<Directory></Directory>` directive to enable the proper **.htaccess** settings needed for *mod_rewrite*.
-
-
-
-Finally, enable the new website then restart apache:
-
-```bash
-$ sudo a2ensite case-docs.conf
-$ sudo service apache2 restart
+    location / {
+        proxy_pass http://127.0.0.1:5000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
 ```
 
 
@@ -132,43 +139,27 @@ $ sudo vi /etc/hosts
 
 ### Debugging
 
-There are a variety of errors that you can face, but we are going to address the most common ones. 
+There are a variety of errors that you can face, but we are going to address the most common ones.
 
-**403** - For 403 errors, check to ensure that the permissions are properly set on the folder and files. For this, we will use the example directory `/srv/http/case-docs/public`:
+**403** - For 403 errors, check to ensure that the permissions are properly set on the folder and files. For this, we will use the example directory `/srv/http/ontology.caseontology.org`:
 
 ```bash
-$ sudo find /srv/http/case-docs/public -type d -exec chmod 775 {} \;
-$ sudo find /srv/http/case-docs/public -type f -exec chmod 664 {} \;
-$ sudo chown -R www-data:www-data /srv/http/case-docs/public
+$ sudo find /srv/http/ontology.caseontology.org -type d -exec chmod 775 {} \;
+$ sudo find /srv/http/ontology.caseontology.org -type f -exec chmod 664 {} \;
+$ sudo chown -R casedocs:casedocs /srv/http/ontology.caseontology.org
 ```
 
-**404** - For 404 errors, this means that apache2 is having trouble finding the file it is trying to serve. There are a few things which can cause this:
-- Ensure that the website's DocumentRoot which is defined in the VirtualHost config in `/etc/apache2/sites-available/*`, actually exists. In addition, ensure you enabled the website and the file exists in `/etc/apache2/sites-enabled/*`.
-- Ensure that `000-default.conf` has been disabled (no longer in `/etc/apache2/sites-enabled/*`)
-- Check that the file actually exists! `tail -f /var/log/apache2/error.log`
+**404** - For 404 errors, is commonly a symptom of the pathing between nginx and the flask router being incorrect:
+- Ensure that the paths defined in the systemctl file (`/etc/systemd/system`) are correctly pointing to the router
+- Check the nginx configuration file (`/etc/nginx/sites-enabled/`) to ensure that the pathing to the documentation is correct
+- Ensure that `default` config for nginx is deleted (no longer in `/etc/nginx/sites-enabled/*`)
+- Check that the file actually exists! `tail -f /var/log/nginx/error.log`
 
 **500** - For any 500 errors, the server may be mis-configured, you can check the following areas to see if there is relevant outputs. This is commonly due to `/etc/apache/apache.conf` being mis-configured, or a typo in one of the sites which are enabled.
 
 ```bash
-$ sudo tail -f /var/log/apache/error.log
-$ journalctl # or check -u apache2
-```
-
-**symlinks** - This repository relies on soft-links to translate some paths from IRI format to generated-documentation format.  Under some conditions, these soft-links can be cloned and appear to be regular files, containing only a relative path.  This is detected by running the `make check-service` prescribed below.
-
-The issue is likely due to the repository being cloned with `core.symlinks` set to `false`.  To correct the issue, run the following from within your cloned directory.
-
-```bash
-# First, confirm whether core.symlinks is returning "false".
-git config core.symlinks
-# If so, proceed with setting to "true".
-git config core.symlinks true
-# A git status now will report that file types changed.
-git status
-# git-checkout will restore the file types to their tracked versions.
-git checkout -- .
-# git-status should now report no revisions.
-git status
+$ sudo tail -f /var/log/nginx/error.log
+$ journalctl
 ```
 
 
