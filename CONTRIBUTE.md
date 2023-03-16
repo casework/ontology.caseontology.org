@@ -61,9 +61,10 @@ Create a directory where the CASE autodocs repository will live, and a dedicated
 
 ```bash
 $ sudo mkdir -p /srv/http/ontology.caseontology.org
-$ sudo useradd -s /usr/sbin/nologin -r -M -d /srv/http/ontology.caseontology.org casedocs
+$ sudo useradd --create-home --shell /usr/sbin/nologin --system casedocs
 ```
 
+(`--create-home` is suggested for shell auditing purposes, and would create `/home/casedocs` if passed.)
 
 Use the system user to clone this repository on the machine, you will need to initalize a repository in the home directory, to be able to pull to the non-empty target:
 ```bash
