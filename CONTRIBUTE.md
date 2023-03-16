@@ -12,7 +12,7 @@ The intended audience for this section is documentation maintainers.
 
 The documentation generation must be carried out on a case-sensitive file system. (macOS's default file system deployment is case-insensitive.)
 
-**Do not** commit changes under the `/case` directory on a case-insensitive file system.  Conflicts due to upper-vs.-lower casing will create erroneous symlink references.  Be aware that changes will be present on a fresh `git clone` in a case-insensitive file system.
+**Do not** commit changes under the `/case` directory on a case-insensitive file system.  Conflicts due to upper-vs.-lower casing will create erroneous concept files.  Be aware that changes will be present on a fresh `git clone` in a case-insensitive file system.
 
 
 ### Generation directions
