@@ -3,7 +3,7 @@
 Previously, documentation for new releases of *CASE*/*UCO* would have to be manually built using gendocs/ontodocs, in order to deploy documentation via the project websites ([CASE](https://caseontology.org/)/[UCO](https://unifiedcyberontology.org)). With this repository, building the documentation and deploying it on the web will be a more automated process, and allow for local documentation to be built for necessary cases.
 
 
-## Directions for generating documentation for a new release
+## Directions for generating and deploying documentation for a new release
 
 The intended audience for this section is documentation maintainers.
 
@@ -25,8 +25,14 @@ When a new ontology release is created, follow these steps:
 4. Run `make`.  (`make -j` will work.)
 5. Run `git add case`.  This will pick up all file deletions and new file creations.
 6. Commit the changes.
-7. Push to Github.
-8. Run `git pull` in the deployment space.
+7. Push to GitHub.
+
+
+### Deployment update directions
+
+After a new ontology documentation state has been pushed to GitHub, follow these steps:
+
+1. Run `git pull` in the deployment space.
 
 
 ## Directions for deployment of this repository as a documentation service
