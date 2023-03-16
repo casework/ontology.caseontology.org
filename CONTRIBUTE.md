@@ -20,7 +20,7 @@ The documentation generation must be carried out on a case-sensitive file system
 When a new ontology release is created, follow these steps:
 
 1. Update the ontology-tracking submodule pointer in this repository to point at the new release's commit.
-2. The version of CASE is hard-coded in `case/Makefile` as part of titling the documentation.  Update it to the new version.
+2. The version of CASE is hard-coded in `${top_srcdir}/Makefile` as part of titling the documentation.  Update it to the new version.
 3. Run `make clean`.
 4. Run `make`.  (`make -j` will work.)
 5. Run `git add case`.  This will pick up all file deletions and new file creations.
