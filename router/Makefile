@@ -1,7 +1,6 @@
 #!/usr/bin/make -f
 
 SHELL := /bin/bash
-srcdir := $(shell cd .. ; pwd)
 
 PY3 ?= python3
 
