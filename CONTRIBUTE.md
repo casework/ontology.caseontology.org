@@ -39,9 +39,10 @@ After a new ontology documentation state has been pushed to GitHub, follow these
 
 For the deployment of the documentation, we assume this repository is cloned to a Linux server, becoming the directory `/srv/http/ontology.caseontology.org/`. The nginx configuration file and casedocs systemctl service file are pathed to this directory by default.
 
-### Configuration
-To deploy, the system will need to have **Nginx** installed and this repository cloned on it. We will use a simple **flask** router and a a series of version-specific mapping files to route traffic to the proper documentation pages. This CONTRIBUTE.md page will outline installing **Nginx** and utilizing the **Makefile** to test the setup. All commands will assume the deployment system is a debian-based system *(such as Ubuntu)*.
 
+### Configuration
+
+To deploy, the system will need to have **Nginx** installed and this repository cloned on it. We will use a simple **flask** router and a series of version-specific mapping files to route traffic to the proper documentation pages. This `CONTRIBUTE.md` page will outline installing **Nginx** and utilizing the **Makefile** to test the setup. All commands will assume the deployment system is a Debian-based system *(such as Ubuntu)*.
 
 First, update the package repositories and update the system:
 
@@ -50,15 +51,13 @@ $ sudo apt-get update
 $ sudo apt-get -y upgrade
 ```
 
-
 Then, install Nginx on the server:
 
 ```bash
 $ sudo apt-get install nginx
 ```
 
-
-Create a directory where the CASE autodocs repository will live, and a system user:
+Create a directory where the CASE autodocs repository will live, and a dedicated system user:
 
 ```bash
 $ sudo mkdir -p /srv/http/ontology.caseontology.org
