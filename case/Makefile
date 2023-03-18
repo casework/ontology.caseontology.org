@@ -1,5 +1,8 @@
 #!/usr/bin/make -f
 
+# Portions of this file contributed by NIST are governed by the following
+# statement:
+#
 # This software was developed at the National Institute of Standards
 # and Technology by employees of the Federal Government in the course
 # of their official duties. Pursuant to title 17 Section 105 of the
@@ -15,53 +18,23 @@ SHELL := /bin/bash
 
 top_srcdir := $(shell cd .. ; pwd)
 
-CURRENT_RELEASE := 0.7.1
+CURRENT_RELEASE ?=
+ifeq ($(CURRENT_RELEASE),)
+$(error CURRENT_RELEASE not defined - did you call 'make' from one directory up?)
+endif
 
 RDF_TOOLKT_JAR := $(top_srcdir)/dependencies/CASE/dependencies/UCO/lib/rdf-toolkit.jar
 
+version_iri_files := \
+  case/$(CURRENT_RELEASE).rdf \
+  case/$(CURRENT_RELEASE).ttl \
+  investigation/$(CURRENT_RELEASE).rdf \
+  investigation/$(CURRENT_RELEASE).ttl \
+  vocabulary/$(CURRENT_RELEASE).rdf \
+  vocabulary/$(CURRENT_RELEASE).ttl
+
 all: \
-  .symlinking.done.log \
-  case.rdf \
-  case.ttl \
-  investigation.rdf \
-  investigation.ttl \
-  vocabulary.rdf \
-  vocabulary.ttl
-
-.PHONY: \
-  clean-symlinking
-
-.documentation.done.log: \
-  $(top_srcdir)/.venv.done.log \
-  $(top_srcdir)/dependencies/CASE/tests/case_monolithic.ttl
-	rm -rf documentation
-	mkdir documentation
-	source $(top_srcdir)/venv/bin/activate \
-	  && ontospy gendocs \
-	    --outputpath $$PWD/documentation \
-	    --theme united \
-	    --title case-$(CURRENT_RELEASE)-docs \
-	    --type 2 \
-	    $(top_srcdir)/dependencies/CASE/tests/case_monolithic.ttl
-	touch $@
-
-# NOTE: In CASE, this script is only called on the investigation.ttl
-# file, because:
-# * gendocs does not build documentation for datatypes, and
-# * UCO concepts will not require symlinks to be constructed for the
-#   benefit of .htaccess redirects.  UCO IRIs will not visit CASE's
-#   server, and links within the gendocs HTML files are already
-#   relatively-pathed to the gendocs HTML file name pattern.
-.symlinking.done.log: \
-  .documentation.done.log
-	source $(top_srcdir)/venv/bin/activate \
-	  && python3 $(top_srcdir)/src/map_concepts_as_symlinks.py \
-	    $(top_srcdir)/dependencies/CASE/ontology/investigation/investigation.ttl
-	# Spot-check one concept's link.
-	test -r documentation/class-investigationinvestigativeaction.html
-	test -L investigation/InvestigativeAction.html
-	test -r investigation/InvestigativeAction.html
-	touch $@
+  $(version_iri_files)
 
 case.rdf: \
   $(top_srcdir)/dependencies/CASE/ontology/master/case.ttl \
@@ -78,33 +51,29 @@ case.rdf: \
 	  __$@ \
 	  > _$@
 	rm __$@
-	mkdir -p case
-	cp _$@ case/$(CURRENT_RELEASE).rdf
 	mv _$@ $@
 
 case.ttl: \
   $(top_srcdir)/dependencies/CASE/ontology/master/case.ttl
 	cp $< $@
-	mkdir -p case
-	cp $< case/$(CURRENT_RELEASE).ttl
 
-clean: \
-  clean-symlinking
+case/$(CURRENT_RELEASE).rdf: \
+  case.rdf
+	mkdir -p case
+	cp $< $@
+
+case/$(CURRENT_RELEASE).ttl: \
+  case.ttl
+	mkdir -p case
+	cp $< $@
+
+clean:
+	@rm -f \
+	  $(version_iri_files)
 	@rm -f \
 	  *.rdf \
 	  *.ttl \
 	  .*.done.log
-	@rm -rf \
-	  documentation
-
-clean-symlinking:
-	@rm -f \
-	  .symlinking.done.log
-	@find \
-	  . \
-	  -name '*.html' \
-	  -type l \
-	  -exec rm '{}' \;
 
 investigation.rdf: \
   $(top_srcdir)/dependencies/CASE/ontology/investigation/investigation.ttl \
@@ -121,15 +90,21 @@ investigation.rdf: \
 	  __$@ \
 	  > _$@
 	rm __$@
-	mkdir -p investigation
-	cp _$@ investigation/$(CURRENT_RELEASE).rdf
 	mv _$@ $@
 
 investigation.ttl: \
   $(top_srcdir)/dependencies/CASE/ontology/investigation/investigation.ttl
 	cp $< $@
+
+investigation/$(CURRENT_RELEASE).rdf: \
+  investigation.rdf
 	mkdir -p investigation
-	cp $< investigation/$(CURRENT_RELEASE).ttl
+	cp $< $@
+
+investigation/$(CURRENT_RELEASE).ttl: \
+  investigation.ttl
+	mkdir -p investigation
+	cp $< $@
 
 vocabulary.rdf: \
   $(top_srcdir)/dependencies/CASE/ontology/vocabulary/vocabulary.ttl \
@@ -146,12 +121,18 @@ vocabulary.rdf: \
 	  __$@ \
 	  > _$@
 	rm __$@
-	mkdir -p vocabulary
-	cp _$@ vocabulary/$(CURRENT_RELEASE).rdf
 	mv _$@ $@
 
 vocabulary.ttl: \
   $(top_srcdir)/dependencies/CASE/ontology/vocabulary/vocabulary.ttl
 	cp $< $@
+
+vocabulary/$(CURRENT_RELEASE).rdf: \
+  vocabulary.rdf
 	mkdir -p vocabulary
-	cp $< vocabulary/$(CURRENT_RELEASE).ttl
+	cp $< $@
+
+vocabulary/$(CURRENT_RELEASE).ttl: \
+  vocabulary.ttl
+	mkdir -p vocabulary
+	cp $< $@

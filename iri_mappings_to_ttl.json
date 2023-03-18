@@ -1,0 +1,8 @@
+{
+    "/case/case": "/case/case.ttl",
+    "/case/case/0.7.1": "/case/case/0.7.1.ttl",
+    "/case/investigation": "/case/investigation.ttl",
+    "/case/investigation/0.7.1": "/case/investigation/0.7.1.ttl",
+    "/case/vocabulary": "/case/vocabulary.ttl",
+    "/case/vocabulary/0.7.1": "/case/vocabulary/0.7.1.ttl"
+}

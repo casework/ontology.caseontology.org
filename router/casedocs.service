@@ -1,0 +1,12 @@
+[Unit]
+Description=Flask based router for CASE Documentation
+After=multi-user.target
+
+[Service]
+User=casedocs
+WorkingDirectory=/srv/http/ontology.caseontology.org/router
+ExecStart=/srv/http/ontology.caseontology.org/router/venv/bin/gunicorn --workers 4 --bind 0.0.0.0:5000 app:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
