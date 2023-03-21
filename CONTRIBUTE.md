@@ -23,9 +23,10 @@ When a new ontology release is created, follow these steps:
 2. The version of CASE is hard-coded in `${top_srcdir}/Makefile` as part of titling the documentation.  Update it to the new version.
 3. Run `make clean`.
 4. Run `make`.  (`make -j` will work.)
-5. Run `git add case`.  This will pick up all file deletions and new file creations.
-6. Commit the changes.
-7. Push to GitHub.
+5. Run `git add case documentation`.  This will pick up all file deletions and new file creations.
+6. Run `git add` for the other refreshed text files in `${top_srcdir}`.
+7. Commit the changes.
+8. Push to GitHub.
 
 
 ## Directions for deployment of this repository as a documentation service
