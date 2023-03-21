@@ -25,5 +25,5 @@ deploy: \
 	touch $@
 
 clean:
-	rm -rf venv ||:
+	rm -rf .venv.done.log venv ||:
 	find . -type d -name __pycache__ -exec rm -r {} \+ ||:
