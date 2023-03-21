@@ -2,9 +2,11 @@
     "/case/case": "/documentation/index.html",
     "/case/case/": "/documentation/index.html",
     "/case/case/0.7.1": "/documentation/index.html",
+    "/case/case/1.0.0": "/documentation/index.html",
     "/case/investigation": "/documentation/index.html",
     "/case/investigation/": "/documentation/index.html",
     "/case/investigation/0.7.1": "/documentation/index.html",
+    "/case/investigation/1.0.0": "/documentation/index.html",
     "/case/investigation/Attorney": "/documentation/class-investigationattorney.html",
     "/case/investigation/Authorization": "/documentation/class-investigationauthorization.html",
     "/case/investigation/Examiner": "/documentation/class-investigationexaminer.html",
@@ -28,5 +30,6 @@
     "/case/investigation/wasInformedBy": "/documentation/prop-investigationwasinformedby.html",
     "/case/vocabulary": "/documentation/index.html",
     "/case/vocabulary/": "/documentation/index.html",
-    "/case/vocabulary/0.7.1": "/documentation/index.html"
+    "/case/vocabulary/0.7.1": "/documentation/index.html",
+    "/case/vocabulary/1.0.0": "/documentation/index.html"
 }
