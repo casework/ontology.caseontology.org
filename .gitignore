@@ -1,3 +1,4 @@
 *.swp
 .*.done.log
+current_ontology_version.txt
 venv

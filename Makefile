@@ -18,9 +18,6 @@ SHELL := /bin/bash
 
 top_srcdir := $(shell pwd)
 
-# TODO - This should probably be parsed into a file.
-CURRENT_RELEASE := 1.0.0
-
 # Use HOST_PREFIX to test the deployment at the specified host.
 # Syntax note - there is no trailing slash.
 HOST_PREFIX ?= http://localhost
@@ -34,15 +31,15 @@ all: \
   check-service
 
 .case.done.log: \
-  .venv.done.log \
+  current_ontology_version.txt \
   dependencies/CASE/tests/case_monolithic.ttl
 	$(MAKE) \
-	  CURRENT_RELEASE=$(CURRENT_RELEASE) \
+	  CURRENT_RELEASE=$$(head -n1 current_ontology_version.txt) \
 	  --directory case
 	touch $@
 
 .documentation.done.log: \
-  .venv.done.log \
+  current_ontology_version.txt \
   dependencies/CASE/tests/case_monolithic.ttl
 	rm -rf documentation
 	mkdir documentation
@@ -50,7 +47,7 @@ all: \
 	  && ontospy gendocs \
 	    --outputpath $$PWD/documentation \
 	    --theme united \
-	    --title case-$(CURRENT_RELEASE)-docs \
+	    --title case-$$(head -n1 current_ontology_version.txt)-docs \
 	    --type 2 \
 	    $(top_srcdir)/dependencies/CASE/tests/case_monolithic.ttl
 	test -r documentation/index.html
@@ -191,7 +188,7 @@ check-service:
 
 clean:
 	@$(MAKE) \
-	  CURRENT_RELEASE=$(CURRENT_RELEASE) \
+	  CURRENT_RELEASE=$$(head -n1 current_ontology_version.txt) \
 	  --directory case \
 	  clean
 	@rm -f .*.done.log
@@ -212,6 +209,18 @@ current_ontology_iris.txt: \
 	    --ontology-base https://ontology.caseontology.org \
 	    _$@ \
 	    dependencies/CASE/tests/case_monolithic.ttl
+	mv _$@ $@
+
+current_ontology_version.txt: \
+  .git_submodule_init.done.log \
+  .venv.done.log \
+  src/current_ontology_version.py
+	source venv/bin/activate \
+	  && python3 src/current_ontology_version.py \
+	    dependencies/CASE/ontology/master/case.ttl \
+	    https://ontology.caseontology.org/case/case \
+	    > _$@
+	test -s _$@
 	mv _$@ $@
 
 dependencies/CASE/tests/case_monolithic.ttl: \
