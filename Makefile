@@ -69,8 +69,6 @@ all: \
 	  --directory dependencies/CASE \
 	  .git_submodule_init.done.log \
 	  .lib.done.log
-	test -r dependencies/Ontospy/README.md \
-	  || (git submodule init dependencies/Ontospy && git submodule update dependencies/Ontospy)
 	touch $@
 
 .venv.done.log: \
@@ -88,10 +86,6 @@ all: \
 	source venv/bin/activate \
 	  && pip install \
 	    --requirement requirements.txt
-	source venv/bin/activate \
-	  && pip install \
-	    --editable \
-	    dependencies/Ontospy[FULL]
 	touch $@
 
 # Test matrix:
