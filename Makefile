@@ -19,7 +19,7 @@ SHELL := /bin/bash
 top_srcdir := $(shell pwd)
 
 # TODO - This should probably be parsed into a file.
-CURRENT_RELEASE := 0.7.1
+CURRENT_RELEASE := 1.0.0
 
 # Use HOST_PREFIX to test the deployment at the specified host.
 # Syntax note - there is no trailing slash.
