@@ -2,10 +2,13 @@
     "/case/case": "/case/case.ttl",
     "/case/case/0.7.1": "/case/case/0.7.1.ttl",
     "/case/case/1.0.0": "/case/case/1.0.0.ttl",
+    "/case/case/1.1.0": "/case/case/1.1.0.ttl",
     "/case/investigation": "/case/investigation.ttl",
     "/case/investigation/0.7.1": "/case/investigation/0.7.1.ttl",
     "/case/investigation/1.0.0": "/case/investigation/1.0.0.ttl",
+    "/case/investigation/1.1.0": "/case/investigation/1.1.0.ttl",
     "/case/vocabulary": "/case/vocabulary.ttl",
     "/case/vocabulary/0.7.1": "/case/vocabulary/0.7.1.ttl",
-    "/case/vocabulary/1.0.0": "/case/vocabulary/1.0.0.ttl"
+    "/case/vocabulary/1.0.0": "/case/vocabulary/1.0.0.ttl",
+    "/case/vocabulary/1.1.0": "/case/vocabulary/1.1.0.ttl"
 }
