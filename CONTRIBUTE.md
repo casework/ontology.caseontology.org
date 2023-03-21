@@ -28,13 +28,6 @@ When a new ontology release is created, follow these steps:
 7. Push to GitHub.
 
 
-### Deployment update directions
-
-After a new ontology documentation state has been pushed to GitHub, follow these steps:
-
-1. Run `git pull` in the deployment space.
-
-
 ## Directions for deployment of this repository as a documentation service
 
 For the deployment of the documentation, we assume this repository is cloned to a Linux server, becoming the directory `/srv/http/ontology.caseontology.org/`. The nginx configuration file and casedocs systemctl service file are pathed to this directory by default.
@@ -67,7 +60,7 @@ $ sudo chown casedocs:casedocs /srv/http/ontology.caseontology.org
 
 (`--create-home` is suggested for shell auditing purposes, and would create `/home/casedocs` if passed.)
 
-Use the new system user to clone this repository on the machine, you will need to initalize a repository in the home directory, to be able to pull to the non-empty target:
+Use the new system user to clone this repository on the machine, you will need to initalize a repository in the service directory, to be able to pull to the non-empty target:
 
 ```bash
 $ sudo su casedocs -s /bin/bash
