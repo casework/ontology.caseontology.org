@@ -98,6 +98,12 @@ all: \
 # Concept broad type: ontology, class, or property
 # "Accept" header: none specified, Turtle requested, or RDF requested
 check-service:
+	## XFAILs
+	wget \
+	  --output-document _$@ \
+	  $(HOST_PREFIX)/.git \
+	  ; rc=$$? ; test 8 -eq $$rc
+	rm _$@
 	## Ontologies
 	wget \
 	  --output-document _$@ \
