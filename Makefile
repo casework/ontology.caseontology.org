@@ -226,6 +226,9 @@ current_ontology_version.txt: \
 dependencies/CASE/tests/case_monolithic.ttl: \
   .git_submodule_init.done.log
 	$(MAKE) \
+	  --directory dependencies/CASE \
+	  .venv.done.log
+	$(MAKE) \
 	  --directory dependencies/CASE/tests \
 	  case_monolithic.ttl
 	# Clean up superfluous artifact.  TODO - This step can be removed after the 0.3.0 release of the referenced tool.
