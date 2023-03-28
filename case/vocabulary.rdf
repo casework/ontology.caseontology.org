@@ -9,9 +9,9 @@
 	
 	<owl:Ontology rdf:about="https://ontology.caseontology.org/case/vocabulary">
 		<rdfs:label xml:lang="en">vocabularies</rdfs:label>
-		<owl:backwardCompatibleWith rdf:resource="&vocab;1.0.0"/>
-		<owl:priorVersion rdf:resource="&vocab;1.0.0"/>
-		<owl:versionIRI rdf:resource="&vocab;1.1.0"/>
+		<owl:backwardCompatibleWith rdf:resource="&vocab;1.1.0"/>
+		<owl:priorVersion rdf:resource="&vocab;1.1.0"/>
+		<owl:versionIRI rdf:resource="&vocab;1.2.0"/>
 	</owl:Ontology>
 	
 	<rdfs:Datatype rdf:about="&vocab;InvestigationFormVocab">

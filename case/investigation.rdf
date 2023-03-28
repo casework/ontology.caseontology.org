@@ -15,12 +15,12 @@
 	<owl:Ontology rdf:about="https://ontology.caseontology.org/case/investigation">
 		<rdfs:label xml:lang="en">investigation</rdfs:label>
 		<rdfs:comment>This ontology defines key concepts, and their associated properties and relationships, for characterizing cyber-investigations in the broadest range of contexts, including security incidents, criminal investigations, civil and regulatory matters, intelligence operations, international disputes, accident inquiries, policy violations, and others.</rdfs:comment>
-		<owl:backwardCompatibleWith rdf:resource="https://ontology.caseontology.org/case/investigation/1.0.0"/>
-		<owl:imports rdf:resource="https://ontology.caseontology.org/case/vocabulary/1.1.0"/>
-		<owl:imports rdf:resource="https://ontology.unifiedcyberontology.org/uco/action/1.1.0"/>
-		<owl:imports rdf:resource="https://ontology.unifiedcyberontology.org/uco/role/1.1.0"/>
-		<owl:priorVersion rdf:resource="https://ontology.caseontology.org/case/investigation/1.0.0"/>
-		<owl:versionIRI rdf:resource="https://ontology.caseontology.org/case/investigation/1.1.0"/>
+		<owl:backwardCompatibleWith rdf:resource="https://ontology.caseontology.org/case/investigation/1.1.0"/>
+		<owl:imports rdf:resource="https://ontology.caseontology.org/case/vocabulary/1.2.0"/>
+		<owl:imports rdf:resource="https://ontology.unifiedcyberontology.org/uco/action/1.2.0"/>
+		<owl:imports rdf:resource="https://ontology.unifiedcyberontology.org/uco/role/1.2.0"/>
+		<owl:priorVersion rdf:resource="https://ontology.caseontology.org/case/investigation/1.1.0"/>
+		<owl:versionIRI rdf:resource="https://ontology.caseontology.org/case/investigation/1.2.0"/>
 	</owl:Ontology>
 	
 	<rdf:Description rdf:about="https://ontology.caseontology.org/case/investigation/Attorney">
