@@ -196,9 +196,16 @@ clean:
 	  || $(MAKE) \
 	    --directory dependencies/CASE \
 	    clean
-	@# Revert status of test files, to avoid CASE submodule irrelevantly reporting as dirty.
+	@# Revert status of catalog and test files, to avoid CASE submodule irrelevantly reporting as dirty.
 	@cd dependencies/CASE \
-	  && git checkout -- tests/examples
+	  && git checkout -- \
+	    ontology/*/catalog-v001.xml \
+	    tests/examples
+	@cd dependencies/CASE/dependencies/UCO \
+	  && git checkout -- \
+	    ontology/*/*/catalog-v001.xml \
+	    ontology/*/catalog-v001.xml \
+	    tests/examples
 
 current_ontology_iris.txt: \
   .venv.done.log \
@@ -225,6 +232,9 @@ current_ontology_version.txt: \
 
 dependencies/CASE/tests/case_monolithic.ttl: \
   .git_submodule_init.done.log
+	$(MAKE) \
+	  --directory dependencies/CASE \
+	  .venv.done.log
 	$(MAKE) \
 	  --directory dependencies/CASE/tests \
 	  case_monolithic.ttl
