@@ -28,6 +28,7 @@ all: \
   iri_mappings_to_ttl.json
 
 .PHONY: \
+  check-mypy \
   check-service
 
 .case.done.log: \
@@ -84,6 +85,17 @@ all: \
 	  && pip install \
 	    --requirement requirements.txt
 	touch $@
+
+check: \
+  check-mypy
+
+check-mypy: \
+  .venv.done.log
+	source venv/bin/activate \
+	  && mypy \
+	    --strict \
+	    router \
+	    src
 
 # Test matrix:
 # Concept broad type: ontology, class, or property
