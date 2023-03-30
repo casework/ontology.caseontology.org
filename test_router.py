@@ -81,9 +81,53 @@ def test_status_200(
     ["url_path", "accept_content_type", "expected_location"],
     [
         (
+            "/",
+            None,
+            "/documentation/index.html",
+        ),
+        (
+            # Confirm HTML index for non-umbrella namespaces are redirected to umbrella documentation index.
+            "/case/investigation",
+            None,
+            "/documentation/index.html",
+        ),
+        (
             "/case/investigation",
             "application/rdf+xml",
             "/case/investigation.rdf",
+        ),
+        (
+            "/case/investigation",
+            "text/turtle",
+            "/case/investigation.ttl",
+        ),
+        (
+            # Confirm HTML index for non-umbrella namespaces are redirected to umbrella documentation index.
+            "/case/investigation/",
+            None,
+            "/documentation/index.html",
+        ),
+        (
+            # Confirm HTML index for non-umbrella namespaces are redirected to umbrella documentation index.
+            "/case/investigation/1.0.0",
+            None,
+            "/documentation/index.html",
+        ),
+        (
+            "/case/investigation/1.0.0",
+            "application/rdf+xml",
+            "/case/investigation/1.0.0.rdf",
+        ),
+        (
+            # Confirm HTML index for non-umbrella namespaces are redirected to umbrella documentation index.
+            "/case/investigation/1.0.0",
+            "text/html",
+            "/documentation/index.html",
+        ),
+        (
+            "/case/investigation/1.0.0",
+            "text/turtle",
+            "/case/investigation/1.0.0.ttl",
         ),
         (
             "/case/investigation/ProvenanceRecord",
