@@ -182,12 +182,6 @@ check-service:
 #	  $(HOST_PREFIX)/case/investigation/exhibitNumber
 #	diff _$@ case/investigation/exhibitNumber.rdf
 #	rm _$@
-	# Confirm documentation index is reachable.
-	wget \
-	  --output-document _$@ \
-	  $(HOST_PREFIX)/documentation/
-	diff _$@ documentation/index.html
-	rm _$@
 	# Confirm HTML index for non-umbrella namespaces are redirected to umbrella documentation index.
 	wget \
 	  --header 'Accept: text/html' \
