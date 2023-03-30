@@ -71,7 +71,8 @@ all: \
 
 .venv.done.log: \
   .git_submodule_init.done.log \
-  requirements.txt
+  requirements.txt \
+  router/requirements.txt
 	rm -rf venv
 	python3 -m venv \
 	  venv
@@ -81,6 +82,9 @@ all: \
 	    pip \
 	    setuptools \
 	    wheel
+	source venv/bin/activate \
+	  && pip install \
+	    --requirement router/requirements.txt
 	source venv/bin/activate \
 	  && pip install \
 	    --requirement requirements.txt
@@ -95,101 +99,15 @@ check-mypy: \
 	  && mypy \
 	    --strict \
 	    router \
-	    src
+	    src \
+	    test_router.py
 
-# Test matrix:
-# Concept broad type: ontology, class, or property
-# "Accept" header: none specified, Turtle requested, or RDF requested
-check-service:
-	## XFAILs
-	wget \
-	  --output-document _$@ \
-	  $(HOST_PREFIX)/.git \
-	  ; rc=$$? ; test 8 -eq $$rc
-	rm _$@
-	## Ontologies
-	wget \
-	  --output-document _$@ \
-	  $(HOST_PREFIX)/case/vocabulary.ttl
-	diff _$@ case/vocabulary.ttl
-	rm _$@
-	wget \
-	  --output-document _$@ \
-	  $(HOST_PREFIX)/case/vocabulary.rdf
-	diff _$@ case/vocabulary.rdf
-	rm _$@
-	wget \
-	  --header 'Accept: text/turtle' \
-	  --output-document _$@ \
-	  $(HOST_PREFIX)/case/vocabulary
-	diff _$@ case/vocabulary.ttl
-	rm _$@
-	wget \
-	  --header 'Accept: application/rdf+xml' \
-	  --output-document _$@ \
-	  $(HOST_PREFIX)/case/vocabulary
-	diff _$@ case/vocabulary.rdf
-	rm _$@
-	## Classes
-	wget \
-	  --output-document _$@ \
-	  $(HOST_PREFIX)/case/investigation/ProvenanceRecord
-	# NOTE - no comparison test done, default behavior just needs to not return a server error.
-	rm _$@
-	wget \
-	  --header 'Accept: text/html' \
-	  --output-document _$@ \
-	  $(HOST_PREFIX)/case/investigation/ProvenanceRecord
-	diff _$@ documentation/class-investigationprovenancerecord.html
-	rm _$@
-#	#TODO - Turtle breakout needs to be written.
-#	wget \
-#	  --header 'Accept: text/turtle' \
-#	  --output-document _$@ \
-#	  $(HOST_PREFIX)/case/investigation/ProvenanceRecord
-#	diff _$@ case/investigation/ProvenanceRecord.ttl
-#	rm _$@
-#	#TODO - Turtle RDF-XML breakout needs to be written.
-#	wget \
-#	  --header 'Accept: application/rdf+xml' \
-#	  --output-document _$@ \
-#	  $(HOST_PREFIX)/case/investigation/ProvenanceRecord
-#	diff _$@ case/investigation/ProvenanceRecord.rdf
-#	rm _$@
-	## Properties
-	wget \
-	  --output-document _$@ \
-	  $(HOST_PREFIX)/case/investigation/exhibitNumber
-	# NOTE - no comparison test done, default behavior just needs to not return a server error.
-	rm _$@
-	wget \
-	  --header 'Accept: text/html' \
-	  --output-document _$@ \
-	  $(HOST_PREFIX)/case/investigation/exhibitNumber
-	diff _$@ documentation/prop-investigationexhibitnumber.html
-	rm _$@
-#	#TODO - Turtle breakout needs to be written.
-#	wget \
-#	  --header 'Accept: text/turtle' \
-#	  --output-document _$@ \
-#	  $(HOST_PREFIX)/case/investigation/exhibitNumber
-#	diff _$@ case/investigation/exhibitNumber.ttl
-#	rm _$@
-#	#TODO - Turtle RDF-XML breakout needs to be written.
-#	wget \
-#	  --header 'Accept: application/rdf+xml' \
-#	  --output-document _$@ \
-#	  $(HOST_PREFIX)/case/investigation/exhibitNumber
-#	diff _$@ case/investigation/exhibitNumber.rdf
-#	rm _$@
-	# Confirm HTML index for non-umbrella namespaces are redirected to umbrella documentation index.
-	wget \
-	  --header 'Accept: text/html' \
-	  --output-document _$@ \
-	  $(HOST_PREFIX)/case/investigation/
-	diff _$@ documentation/index.html
-	rm _$@
-	@echo >&2
+check-service: \
+  .venv.done.log
+	source venv/bin/activate \
+	  && HOST_PREFIX="$(HOST_PREFIX)" \
+	    pytest test_router.py \
+	      --log-level=DEBUG
 	@echo "INFO:Makefile:Service tests pass!" >&2
 
 clean:
