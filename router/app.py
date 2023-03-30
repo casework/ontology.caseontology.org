@@ -64,7 +64,7 @@ def router(ontology: str, target: str) -> BaseResponse:
 
     # override content_type with extensions from the target for restful lookups
     file_request = False
-    if 'ttl' in target or 'rdf' in target:
+    if target.endswith('.ttl') or target.endswith('.rdf'):
         file_request = True
         target_parts = target.rsplit(".", 1)
         target = target_parts[0]
