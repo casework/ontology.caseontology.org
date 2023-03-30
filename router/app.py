@@ -55,8 +55,9 @@ def root() -> BaseResponse:
     else:
         return redirect(f'http://{request.host}/documentation/index.html', 301)
 
-@app.route("/<ontology>/<path:target>", methods=['GET'])
-def router(ontology: str, target: str) -> BaseResponse:
+
+@app.route("/<path:target>", methods=['GET'])
+def router(target: str) -> BaseResponse:
     '''Routes data through the file system to the appropriate documentation'''
 
     # content_type throughout this function will either be None, or will be spelled as an IANA media type.
@@ -72,10 +73,10 @@ def router(ontology: str, target: str) -> BaseResponse:
 
     # check the headers for a request for RDF-XML content
     if content_type == "application/rdf+xml":
-        if f"/{ontology}/{target}" in rdf:
-            location = rdf[f"/{ontology}/{target}"]
+        if f"/{target}" in rdf:
+            location = rdf[f"/{target}"]
             if file_request:
-                return send_file(".." + rdf[f"/{ontology}/{target}"], as_attachment=True)
+                return send_file(".." + rdf[f"/{target}"], as_attachment=True)
 
             if request.is_secure:
                 return redirect(f'https://{request.host}{location}', 301)
@@ -84,10 +85,10 @@ def router(ontology: str, target: str) -> BaseResponse:
 
     # check the headers for a request for Turtle content
     if content_type == "text/turtle":
-        if f"/{ontology}/{target}" in ttl:
-            location = ttl[f"/{ontology}/{target}"]
+        if f"/{target}" in ttl:
+            location = ttl[f"/{target}"]
             if file_request:
-                return send_file(".." + ttl[f"/{ontology}/{target}"], as_attachment=True)
+                return send_file(".." + ttl[f"/{target}"], as_attachment=True)
 
             if request.is_secure:
                 return redirect(f'https://{request.host}{location}', 301)
@@ -95,8 +96,8 @@ def router(ontology: str, target: str) -> BaseResponse:
                 return redirect(f'http://{request.host}{location}', 301)
 
     # blanket check mappings for HTML
-    if f"/{ontology}/{target}" in html:
-        location = html[f"/{ontology}/{target}"]
+    if f"/{target}" in html:
+        location = html[f"/{target}"]
         if request.is_secure:
             return redirect(f'https://{request.host}{location}', 301)
         else:
