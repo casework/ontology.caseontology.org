@@ -24,6 +24,7 @@ import pathlib
 from flask import Flask, request, redirect, abort, send_file
 from werkzeug.wrappers import Response as BaseResponse
 from datetime import datetime
+from typing import Optional
 import string
 import json
 
@@ -57,7 +58,9 @@ def root() -> BaseResponse:
 @app.route("/<ontology>/<path:target>", methods=['GET'])
 def router(ontology: str, target: str) -> BaseResponse:
     '''Routes data through the file system to the appropriate documentation'''
-    content_type = request.headers.get('Accept')
+
+    # content_type throughout this function will either be None, or will be spelled as an IANA media type.
+    content_type: Optional[str] = request.headers.get('Accept')
 
     # override content_type with extensions from the target for restful lookups
     file_request = False
@@ -65,10 +68,10 @@ def router(ontology: str, target: str) -> BaseResponse:
         file_request = True
         target_parts = target.rsplit(".", 1)
         target = target_parts[0]
-        content_type = 'turtle' if target_parts[1] == 'ttl' else 'rdf'
+        content_type = 'text/turtle' if target_parts[1] == 'ttl' else 'application/rdf+xml'
 
-    # check the headers for 'rdf' in the content-type
-    if content_type is not None and 'rdf' in content_type:
+    # check the headers for a request for RDF-XML content
+    if content_type == "application/rdf+xml":
         if f"/{ontology}/{target}" in rdf:
             location = rdf[f"/{ontology}/{target}"]
             if file_request:
@@ -79,18 +82,17 @@ def router(ontology: str, target: str) -> BaseResponse:
             else:
                 return redirect(f'http://{request.host}{location}', 301)
 
-    # check the headers for 'turtle' in the content type
-    if content_type is not None:
-        if 'turtle' in content_type or 'ttl' in content_type:
-            if f"/{ontology}/{target}" in ttl:
-                location = ttl[f"/{ontology}/{target}"]
-                if file_request:
-                    return send_file(".." + ttl[f"/{ontology}/{target}"], as_attachment=True)
+    # check the headers for a request for Turtle content
+    if content_type == "text/turtle":
+        if f"/{ontology}/{target}" in ttl:
+            location = ttl[f"/{ontology}/{target}"]
+            if file_request:
+                return send_file(".." + ttl[f"/{ontology}/{target}"], as_attachment=True)
 
-                if request.is_secure:
-                    return redirect(f'https://{request.host}{location}', 301)
-                else:
-                    return redirect(f'http://{request.host}{location}', 301)
+            if request.is_secure:
+                return redirect(f'https://{request.host}{location}', 301)
+            else:
+                return redirect(f'http://{request.host}{location}', 301)
 
     # blanket check mappings for HTML
     if f"/{ontology}/{target}" in html:
