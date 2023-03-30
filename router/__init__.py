@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # Portions of this file contributed by NIST are governed by the following
 # statement:
 #
@@ -13,8 +11,3 @@
 # reliability, or any other characteristic.
 #
 # We would appreciate acknowledgement if the software is used.
-
-from .app import app
-
-if __name__ == "__main__":
-    app.run()
