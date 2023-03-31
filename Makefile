@@ -91,7 +91,8 @@ all: \
 	touch $@
 
 check: \
-  check-mypy
+  check-mypy \
+  check-pytest
 
 check-mypy: \
   .venv.done.log
@@ -102,12 +103,31 @@ check-mypy: \
 	    src \
 	    test_router.py
 
-check-service: \
+check-pytest: \
   .venv.done.log
 	source venv/bin/activate \
 	  && HOST_PREFIX="$(HOST_PREFIX)" \
 	    pytest test_router.py \
 	      --log-level=DEBUG
+
+check-service: \
+  current_ontology_version.txt
+	wget \
+	  --output-document _$@ \
+	  $(HOST_PREFIX)/
+	rm _$@
+	wget \
+	  --output-document _$@ \
+	  $(HOST_PREFIX)/documentation/
+	rm _$@
+	wget \
+	  --output-document _$@ \
+	  $(HOST_PREFIX)/case/investigation/1.0.0.rdf
+	rm _$@
+	wget \
+	  --output-document _$@ \
+	  $(HOST_PREFIX)/case/investigation/$$(head -n1 current_ontology_version.txt).rdf
+	rm _$@
 	@echo "INFO:Makefile:Service tests pass!" >&2
 
 clean:
