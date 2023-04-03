@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<rdf:RDF
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:vocab="https://ontology.caseontology.org/case/vocabulary/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+	
+	<owl:Ontology rdf:about="https://ontology.caseontology.org/case/vocabulary">
+		<rdfs:label xml:lang="en">vocabularies</rdfs:label>
+		<owl:backwardCompatibleWith rdf:resource="https://ontology.caseontology.org/case/vocabulary/1.0.0"/>
+		<owl:priorVersion rdf:resource="https://ontology.caseontology.org/case/vocabulary/1.0.0"/>
+		<owl:versionIRI rdf:resource="https://ontology.caseontology.org/case/vocabulary/1.1.0"/>
+	</owl:Ontology>
+	
+	<rdfs:Datatype rdf:about="https://ontology.caseontology.org/case/vocabulary/InvestigationFormVocab">
+		<rdfs:label xml:lang="en-US">Investigation Form Vocabulary</rdfs:label>
+		<rdfs:comment xml:lang="en-US">Defines an open-vocabulary of investigation forms.</rdfs:comment>
+		<owl:equivalentClass>
+			<rdfs:Datatype>
+				<owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+				<owl:oneOf>
+					<rdf:Description>
+						<rdf:first rdf:datatype="https://ontology.caseontology.org/case/vocabulary/InvestigationFormVocab">case</rdf:first>
+						<rdf:rest>
+							<rdf:Description>
+								<rdf:first rdf:datatype="https://ontology.caseontology.org/case/vocabulary/InvestigationFormVocab">incident</rdf:first>
+								<rdf:rest>
+									<rdf:Description>
+										<rdf:first rdf:datatype="https://ontology.caseontology.org/case/vocabulary/InvestigationFormVocab">suspicious-activity</rdf:first>
+										<rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+									</rdf:Description>
+								</rdf:rest>
+							</rdf:Description>
+						</rdf:rest>
+					</rdf:Description>
+				</owl:oneOf>
+			</rdfs:Datatype>
+		</owl:equivalentClass>
+	</rdfs:Datatype>
+
+</rdf:RDF>
