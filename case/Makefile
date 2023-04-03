@@ -69,8 +69,6 @@ case/$(CURRENT_RELEASE).ttl: \
 
 clean:
 	@rm -f \
-	  $(version_iri_files)
-	@rm -f \
 	  *.rdf \
 	  *.ttl \
 	  .*.done.log
