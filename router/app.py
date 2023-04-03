@@ -34,42 +34,51 @@ srcdir = pathlib.Path(__file__).parent
 top_srcdir = srcdir / ".."
 
 # load html mappings
-with (top_srcdir / 'iri_mappings_to_html.json').open('r') as fp:
+with (top_srcdir / "iri_mappings_to_html.json").open("r") as fp:
     html = json.load(fp)
 
 # load rdf mappings
-with (top_srcdir / 'iri_mappings_to_rdf.json').open('r') as fp:
+with (top_srcdir / "iri_mappings_to_rdf.json").open("r") as fp:
     rdf = json.load(fp)
 
 # load ttl mappings
-with (top_srcdir / 'iri_mappings_to_ttl.json').open('r') as fp:
+with (top_srcdir / "iri_mappings_to_ttl.json").open("r") as fp:
     ttl = json.load(fp)
+
 
 @app.route("/")
 def root() -> BaseResponse:
-    '''Routes the root '/' of the host to the index of the docs'''
+    """Routes the root '/' of the host to the index of the docs"""
 
     # redirect when we find a match based on SSL
     if request.is_secure:
-        return redirect(f'https://{request.host}/documentation/index.html', 301)
+        return redirect(f"https://{request.host}/documentation/index.html", 301)
     else:
-        return redirect(f'http://{request.host}/documentation/index.html', 301)
+        return redirect(f"http://{request.host}/documentation/index.html", 301)
 
 
-@app.route("/<path:target>", methods=['GET'])
+@app.route("/<path:target>", methods=["GET"])
 def router(target: str) -> BaseResponse:
-    '''Routes data through the file system to the appropriate documentation'''
+    """Routes data through the file system to the appropriate documentation"""
 
     # content_type throughout this function will either be None, or will be spelled as an IANA media type.
-    content_type: Optional[str] = request.headers.get('Accept')
+    content_type: Optional[str] = request.headers.get("Accept")
+
+    def _redirect_301(location: str) -> BaseResponse:
+        if request.is_secure:
+            return redirect(f"https://{request.host}{location}", 301)
+        else:
+            return redirect(f"http://{request.host}{location}", 301)
 
     # override content_type with extensions from the target for restful lookups
     file_request = False
-    if target.endswith('.ttl') or target.endswith('.rdf'):
+    if target.endswith(".ttl") or target.endswith(".rdf"):
         file_request = True
         target_parts = target.rsplit(".", 1)
         target = target_parts[0]
-        content_type = 'text/turtle' if target_parts[1] == 'ttl' else 'application/rdf+xml'
+        content_type = (
+            "text/turtle" if target_parts[1] == "ttl" else "application/rdf+xml"
+        )
 
     # check the headers for a request for RDF-XML content
     if content_type == "application/rdf+xml":
@@ -78,10 +87,7 @@ def router(target: str) -> BaseResponse:
             if file_request:
                 return send_file(".." + rdf[f"/{target}"], as_attachment=True)
 
-            if request.is_secure:
-                return redirect(f'https://{request.host}{location}', 301)
-            else:
-                return redirect(f'http://{request.host}{location}', 301)
+            return _redirect_301(location)
 
     # check the headers for a request for Turtle content
     if content_type == "text/turtle":
@@ -90,17 +96,21 @@ def router(target: str) -> BaseResponse:
             if file_request:
                 return send_file(".." + ttl[f"/{target}"], as_attachment=True)
 
-            if request.is_secure:
-                return redirect(f'https://{request.host}{location}', 301)
-            else:
-                return redirect(f'http://{request.host}{location}', 301)
+            return _redirect_301(location)
+
+    # lacking a specific content type request, try some known User-Agent patterns.
+    if content_type is None:
+        user_agent: Optional[str] = request.headers.get("User-Agent")
+        if isinstance(user_agent, str):
+            # for agents using Java org.semanticweb.owlapi, default to RDF-XML
+            if user_agent.startswith("Java/"):
+                if f"/{target}" in rdf:
+                    location = rdf[f"/{target}"]
+                    return _redirect_301(location)
 
     # blanket check mappings for HTML
     if f"/{target}" in html:
         location = html[f"/{target}"]
-        if request.is_secure:
-            return redirect(f'https://{request.host}{location}', 301)
-        else:
-            return redirect(f'http://{request.host}{location}', 301)
+        return _redirect_301(location)
 
     abort(404)

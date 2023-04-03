@@ -78,81 +78,123 @@ def test_status_200(
 
 
 @pytest.mark.parametrize(
-    ["url_path", "accept_content_type", "expected_location"],
+    ["url_path", "accept_content_type", "user_agent", "expected_location"],
     [
         (
             "/",
             None,
-            "/documentation/index.html",
-        ),
-        (
-            # Confirm HTML index for non-umbrella namespaces are redirected to umbrella documentation index.
-            "/case/investigation",
             None,
             "/documentation/index.html",
         ),
         (
+            # Confirm non-umbrella ontology request is redirected to umbrella documentation index when HTML content is requested, regardless of user agent.
+            "/case/case",
+            "text/html",
+            "Java/1.8.0_332",
+            "/documentation/index.html",
+        ),
+        (
+            # Confirm umbrella ontology request is redirected to RDF-XML ontology file with org.semanticweb.owlapi behavior.
+            "/case/case",
+            None,
+            "Java/1.8.0_332",
+            "/case/case.rdf",
+        ),
+        (
+            # Confirm non-umbrella ontology request is redirected to umbrella documentation index in default case.
+            "/case/investigation",
+            None,
+            None,
+            "/documentation/index.html",
+        ),
+        (
+            # Confirm non-umbrella ontology request is redirected to RDF-XML ontology file with org.semanticweb.owlapi behavior.
+            "/case/investigation",
+            None,
+            "Java/1.8.0_332",
+            "/case/investigation.rdf",
+        ),
+        (
+            # Confirm non-umbrella ontology version request is redirected to RDF-XML ontology file with org.semanticweb.owlapi behavior.
+            "/case/investigation/1.2.0",
+            None,
+            "Java/1.8.0_332",
+            "/case/investigation/1.2.0.rdf",
+        ),
+        (
             "/case/investigation",
             "application/rdf+xml",
+            None,
             "/case/investigation.rdf",
         ),
         (
             "/case/investigation",
             "text/turtle",
+            None,
             "/case/investigation.ttl",
         ),
         (
             # Confirm HTML index for non-umbrella namespaces are redirected to umbrella documentation index.
             "/case/investigation/",
             None,
+            None,
             "/documentation/index.html",
         ),
         (
             # Confirm HTML index for non-umbrella namespaces are redirected to umbrella documentation index.
             "/case/investigation/1.0.0",
+            None,
             None,
             "/documentation/index.html",
         ),
         (
             "/case/investigation/1.0.0",
             "application/rdf+xml",
+            None,
             "/case/investigation/1.0.0.rdf",
         ),
         (
             # Confirm HTML index for non-umbrella namespaces are redirected to umbrella documentation index.
             "/case/investigation/1.0.0",
             "text/html",
+            None,
             "/documentation/index.html",
         ),
         (
             "/case/investigation/1.0.0",
             "text/turtle",
+            None,
             "/case/investigation/1.0.0.ttl",
         ),
         (
             "/case/investigation/ProvenanceRecord",
             None,
+            None,
             "/documentation/class-investigationprovenancerecord.html",
         ),
         # TODO: Individual concept breakout needs to be written.
         # (
         #     "/case/investigation/ProvenanceRecord",
         #     "application/rdf+xml",
+        #     None,
         #     "/case/investigation/ProvenanceRecord.rdf",
         # ),
         (
             "/case/investigation/ProvenanceRecord",
             "text/html",
+            None,
             "/documentation/class-investigationprovenancerecord.html",
         ),
         # TODO: Individual concept breakout needs to be written.
         # (
         #     "/case/investigation/ProvenanceRecord",
         #     "text/turtle",
+        #     None,
         #     "/case/investigation/ProvenanceRecord.ttl",
         # ),
         (
             "/case/investigation/exhibitNumber",
+            None,
             None,
             "/documentation/prop-investigationexhibitnumber.html",
         ),
@@ -160,17 +202,20 @@ def test_status_200(
         # (
         #     "/case/investigation/exhibitNumber",
         #     "application/rdf+xml",
+        #     None,
         #     "/case/investigation/exhibitNumber.rdf",
         # ),
         (
             "/case/investigation/exhibitNumber",
             "text/html",
+            None,
             "/documentation/prop-investigationexhibitnumber.html",
         ),
         # TODO: Individual concept breakout needs to be written.
         # (
         #     "/case/investigation/exhibitNumber",
         #     "text/turtle",
+        #     None,
         #     "/case/investigation/exhibitNumber.ttl",
         # ),
     ],
@@ -181,6 +226,7 @@ def test_status_301(
     host_prefix: str,
     url_path: str,
     accept_content_type: Optional[str],
+    user_agent: Optional[str],
     expected_location: str,
 ) -> None:
     """
@@ -191,6 +237,8 @@ def test_status_301(
     headers: List[Tuple[str, str]] = []
     if accept_content_type is not None:
         headers.append(("Accept", accept_content_type))
+    if user_agent is not None:
+        headers.append(("User-Agent", user_agent))
     response = client.get(url_path, headers=headers)
     assert 301 == response.status_code
     assert host_prefix + expected_location == response.location
