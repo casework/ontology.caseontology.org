@@ -9,13 +9,13 @@
 	
 	<owl:Ontology rdf:about="https://ontology.caseontology.org/case/vocabulary">
 		<rdfs:label xml:lang="en">vocabularies</rdfs:label>
-		<owl:incompatibleWith rdf:resource="&vocab;0.7.1"/>
+		<owl:incompatibleWith rdf:resource="https://ontology.caseontology.org/case/vocabulary/0.7.1"/>
 		<owl:ontologyIRI rdf:resource="https://ontology.caseontology.org/case/vocabulary"/>
-		<owl:priorVersion rdf:resource="&vocab;0.7.1"/>
-		<owl:versionIRI rdf:resource="&vocab;1.0.0"/>
+		<owl:priorVersion rdf:resource="https://ontology.caseontology.org/case/vocabulary/0.7.1"/>
+		<owl:versionIRI rdf:resource="https://ontology.caseontology.org/case/vocabulary/1.0.0"/>
 	</owl:Ontology>
 	
-	<rdfs:Datatype rdf:about="&vocab;InvestigationFormVocab">
+	<rdfs:Datatype rdf:about="https://ontology.caseontology.org/case/vocabulary/InvestigationFormVocab">
 		<rdfs:label xml:lang="en-US">Investigation Form Vocabulary</rdfs:label>
 		<rdfs:comment xml:lang="en-US">Defines an open-vocabulary of investigation forms.</rdfs:comment>
 		<owl:equivalentClass>
@@ -23,13 +23,13 @@
 				<owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
 				<owl:oneOf>
 					<rdf:Description>
-						<rdf:first rdf:datatype="&vocab;InvestigationFormVocab">case</rdf:first>
+						<rdf:first rdf:datatype="https://ontology.caseontology.org/case/vocabulary/InvestigationFormVocab">case</rdf:first>
 						<rdf:rest>
 							<rdf:Description>
-								<rdf:first rdf:datatype="&vocab;InvestigationFormVocab">incident</rdf:first>
+								<rdf:first rdf:datatype="https://ontology.caseontology.org/case/vocabulary/InvestigationFormVocab">incident</rdf:first>
 								<rdf:rest>
 									<rdf:Description>
-										<rdf:first rdf:datatype="&vocab;InvestigationFormVocab">suspicious-activity</rdf:first>
+										<rdf:first rdf:datatype="https://ontology.caseontology.org/case/vocabulary/InvestigationFormVocab">suspicious-activity</rdf:first>
 										<rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
 									</rdf:Description>
 								</rdf:rest>
