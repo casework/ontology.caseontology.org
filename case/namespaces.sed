@@ -32,6 +32,7 @@ s_&uco-time;_https://ontology.unifiedcyberontology.org/uco/time/_g
 s_&uco-tool;_https://ontology.unifiedcyberontology.org/uco/tool/_g
 s_&uco-types;_https://ontology.unifiedcyberontology.org/uco/types/_g
 s_&uco-victim;_https://ontology.unifiedcyberontology.org/uco/victim/_g
+s_&vocab;_https://ontology.caseontology.org/case/vocabulary/_g
 s_&vocabulary;_https://ontology.caseontology.org/case/vocabulary/_g
 s_&uco-vocabulary;_https://ontology.unifiedcyberontology.org/uco/vocabulary/_g
 s_&xsd;_http://www.w3.org/2001/XMLSchema#_g

@@ -67,6 +67,7 @@ case.rdf: \
   $(top_srcdir)/dependencies/CASE/ontology/master/case.ttl \
   $(RDF_TOOLKT_JAR) \
   namespaces.sed
+	rm -f __$@ _$@
 	java -jar $(RDF_TOOLKT_JAR) \
 	  --inline-blank-nodes \
 	  --source $< \
@@ -77,6 +78,9 @@ case.rdf: \
 	  -f namespaces.sed \
 	  __$@ \
 	  > _$@
+	xmllint \
+	  --noout \
+	  _$@
 	rm __$@
 	mkdir -p case
 	cp _$@ case/$(CURRENT_RELEASE).rdf
