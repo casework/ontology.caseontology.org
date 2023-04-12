@@ -91,8 +91,13 @@ all: \
 	touch $@
 
 check: \
+  .case.done.log \
   check-mypy \
   check-pytest
+	$(MAKE) \
+	  CURRENT_RELEASE=$$(head -n1 current_ontology_version.txt) \
+	  --directory case \
+	  check
 
 check-mypy: \
   .venv.done.log

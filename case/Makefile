@@ -71,6 +71,15 @@ case/$(CURRENT_RELEASE).ttl: \
 	mkdir -p case
 	cp $< $@
 
+check: \
+  $(version_iri_files)
+	# Test that generated RDF-XML is valid XML.
+	source $(top_srcdir)/venv/bin/activate \
+	  && rdfpipe \
+	    --input-format xml \
+	    --no-out \
+	    case.rdf
+
 clean:
 	@rm -f \
 	  *.rdf \
@@ -91,6 +100,9 @@ investigation.rdf: \
 	  -f namespaces.sed \
 	  __$@ \
 	  > _$@
+	xmllint \
+	  --noout \
+	  _$@
 	rm __$@
 	mv _$@ $@
 
@@ -122,6 +134,9 @@ vocabulary.rdf: \
 	  -f namespaces.sed \
 	  __$@ \
 	  > _$@
+	xmllint \
+	  --noout \
+	  _$@
 	rm __$@
 	mv _$@ $@
 
