@@ -23,7 +23,7 @@ ifeq ($(CURRENT_RELEASE),)
 $(error CURRENT_RELEASE not defined - did you call 'make' from one directory up?)
 endif
 
-RDF_TOOLKT_JAR := $(top_srcdir)/dependencies/CASE/dependencies/UCO/lib/rdf-toolkit.jar
+RDF_TOOLKIT_JAR := $(top_srcdir)/dependencies/CASE/dependencies/UCO/lib/rdf-toolkit.jar
 
 version_iri_files := \
   case/$(CURRENT_RELEASE).rdf \
@@ -38,10 +38,10 @@ all: \
 
 case.rdf: \
   $(top_srcdir)/dependencies/CASE/ontology/master/case.ttl \
-  $(RDF_TOOLKT_JAR) \
+  $(RDF_TOOLKIT_JAR) \
   namespaces.sed
 	rm -f __$@ _$@
-	java -jar $(RDF_TOOLKT_JAR) \
+	java -jar $(RDF_TOOLKIT_JAR) \
 	  --inline-blank-nodes \
 	  --source $< \
 	  --source-format turtle \
@@ -79,9 +79,9 @@ clean:
 
 investigation.rdf: \
   $(top_srcdir)/dependencies/CASE/ontology/investigation/investigation.ttl \
-  $(RDF_TOOLKT_JAR) \
+  $(RDF_TOOLKIT_JAR) \
   namespaces.sed
-	java -jar $(RDF_TOOLKT_JAR) \
+	java -jar $(RDF_TOOLKIT_JAR) \
 	  --inline-blank-nodes \
 	  --source $< \
 	  --source-format turtle \
@@ -110,9 +110,9 @@ investigation/$(CURRENT_RELEASE).ttl: \
 
 vocabulary.rdf: \
   $(top_srcdir)/dependencies/CASE/ontology/vocabulary/vocabulary.ttl \
-  $(RDF_TOOLKT_JAR) \
+  $(RDF_TOOLKIT_JAR) \
   namespaces.sed
-	java -jar $(RDF_TOOLKT_JAR) \
+	java -jar $(RDF_TOOLKIT_JAR) \
 	  --inline-blank-nodes \
 	  --source $< \
 	  --source-format turtle \
