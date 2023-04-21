@@ -140,7 +140,9 @@ clean:
 	  CURRENT_RELEASE=$$(head -n1 current_ontology_version.txt) \
 	  --directory case \
 	  clean
-	@rm -f .*.done.log
+	@rm -f \
+	  .*.done.log \
+	  current_ontology_iris.txt
 	@test ! -r dependencies/CASE/README.md \
 	  || $(MAKE) \
 	    --directory dependencies/CASE \
@@ -193,17 +195,6 @@ dependencies/CASE/tests/case_monolithic.ttl: \
 	test -r $@
 	touch $@
 
-# Accumulate all ontology and version IRIs.
-ontology_iris_archive.txt: \
-  current_ontology_iris.txt
-	cat $< > __$@
-	test ! -r $@ \
-	  || cat $@ >> __$@
-	LC_ALL=C sort __$@ \
-	  | uniq > _$@
-	rm __$@
-	mv _$@ $@
-
 iri_mappings_to_html.json: \
   .documentation.done.log \
   ontology_iris_archive.txt \
@@ -237,4 +228,15 @@ iri_mappings_to_ttl.json: \
 	    _$@ \
 	    text/turtle \
 	    ontology_iris_archive.txt
+	mv _$@ $@
+
+# Accumulate all ontology and version IRIs.
+ontology_iris_archive.txt: \
+  current_ontology_iris.txt
+	cat $< > __$@
+	test ! -r $@ \
+	  || cat $@ >> __$@
+	LC_ALL=C sort __$@ \
+	  | uniq > _$@
+	rm __$@
 	mv _$@ $@
