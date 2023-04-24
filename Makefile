@@ -110,7 +110,7 @@ check-mypy: \
 	    test_router.py
 
 check-pytest: \
-  .venv.done.log
+  ontology_iris_archive.txt
 	source venv/bin/activate \
 	  && pytest test_graph_files.py \
 	    --log-level=DEBUG
