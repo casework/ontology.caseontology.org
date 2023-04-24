@@ -32,6 +32,9 @@ def host_prefix() -> str:
         raise ValueError(
             "Unable to retrieve host prefix from process environment.  Please set the environment variable HOST_PREFIX before calling pytest."
         )
+    if _host_prefix.startswith("http://"):
+        logging.info("Host prefix updated to use https scheme.")
+        _host_prefix = _host_prefix.replace("http://", "https://")
     return _host_prefix
 
 
@@ -101,11 +104,11 @@ def test_status_200(
             "/case/case.rdf",
         ),
         (
-            # Confirm non-umbrella ontology request is redirected to umbrella documentation index in default case.
+            # Confirm non-umbrella ontology request is assumed to be RDF-XML request.
             "/case/investigation",
             None,
             None,
-            "/documentation/index.html",
+            "/case/investigation.rdf",
         ),
         (
             # Confirm non-umbrella ontology request is redirected to RDF-XML ontology file with org.semanticweb.owlapi behavior.
@@ -129,23 +132,29 @@ def test_status_200(
         ),
         (
             "/case/investigation",
+            "text/html",
+            None,
+            "/documentation/index.html",
+        ),
+        (
+            "/case/investigation",
             "text/turtle",
             None,
             "/case/investigation.ttl",
         ),
         (
-            # Confirm HTML index for non-umbrella namespaces are redirected to umbrella documentation index.
+            # Confirm prefix IRI (/namespace IRI) redirects to umbrella documentation index.
             "/case/investigation/",
             None,
             None,
             "/documentation/index.html",
         ),
         (
-            # Confirm HTML index for non-umbrella namespaces are redirected to umbrella documentation index.
+            # Confirm version IRI request is assumed to be RDF-XML request.
             "/case/investigation/1.0.0",
             None,
             None,
-            "/documentation/index.html",
+            "/case/investigation/1.0.0.rdf",
         ),
         (
             "/case/investigation/1.0.0",
@@ -154,7 +163,7 @@ def test_status_200(
             "/case/investigation/1.0.0.rdf",
         ),
         (
-            # Confirm HTML index for non-umbrella namespaces are redirected to umbrella documentation index.
+            # Confirm version IRI request as HTML is redirected to umbrella documentation index.
             "/case/investigation/1.0.0",
             "text/html",
             None,
