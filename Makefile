@@ -107,7 +107,7 @@ check-mypy: \
 	    --strict \
 	    router \
 	    src \
-	    test_router.py
+	    test_*.py
 
 check-pytest: \
   ontology_iris_archive.txt
