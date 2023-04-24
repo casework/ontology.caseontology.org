@@ -191,15 +191,13 @@ dependencies/CASE/ontology/master/case.ttl: \
 	test -r $@
 
 dependencies/CASE/tests/case_monolithic.ttl: \
-  .git_submodule_init.done.log
+  dependencies/CASE/ontology/master/case.ttl
 	$(MAKE) \
 	  --directory dependencies/CASE \
 	  .venv.done.log
 	$(MAKE) \
 	  --directory dependencies/CASE/tests \
 	  case_monolithic.ttl
-	# Clean up superfluous artifact.  TODO - This step can be removed after the 0.3.0 release of the referenced tool.
-	rm -rf dependencies/CASE/dependencies/UCO/dependencies/CASE-Utility-SHACL-Inheritance-Review/build
 	# Guarantee file is built and timestamp is up to date.
 	test -r $@
 	touch $@
