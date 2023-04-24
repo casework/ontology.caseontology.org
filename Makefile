@@ -174,8 +174,8 @@ current_ontology_iris.txt: \
 	mv _$@ $@
 
 current_ontology_version.txt: \
-  .git_submodule_init.done.log \
   .venv.done.log \
+  dependencies/CASE/ontology/master/case.ttl \
   src/current_ontology_version.py
 	source venv/bin/activate \
 	  && python3 src/current_ontology_version.py \
@@ -184,6 +184,11 @@ current_ontology_version.txt: \
 	    > _$@
 	test -s _$@
 	mv _$@ $@
+
+dependencies/CASE/ontology/master/case.ttl: \
+  .git_submodule_init.done.log
+	touch -c $@
+	test -r $@
 
 dependencies/CASE/tests/case_monolithic.ttl: \
   .git_submodule_init.done.log
