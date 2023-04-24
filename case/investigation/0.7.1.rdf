@@ -15,13 +15,11 @@
 	<owl:Ontology rdf:about="https://ontology.caseontology.org/case/investigation">
 		<rdfs:label xml:lang="en">investigation</rdfs:label>
 		<rdfs:comment>This ontology defines key concepts, and their associated properties and relationships, for characterizing cyber-investigations in the broadest range of contexts, including security incidents, criminal investigations, civil and regulatory matters, intelligence operations, international disputes, accident inquiries, policy violations, and others.</rdfs:comment>
-		<owl:imports rdf:resource="https://ontology.caseontology.org/case/vocabulary/1.0.0"/>
-		<owl:imports rdf:resource="https://ontology.unifiedcyberontology.org/uco/action/1.0.0"/>
-		<owl:imports rdf:resource="https://ontology.unifiedcyberontology.org/uco/role/1.0.0"/>
-		<owl:incompatibleWith rdf:resource="https://ontology.caseontology.org/case/investigation/0.7.1"/>
+		<owl:imports rdf:resource="https://ontology.caseontology.org/case/vocabulary/0.7.1"/>
+		<owl:imports rdf:resource="https://ontology.unifiedcyberontology.org/uco/action/0.9.1"/>
+		<owl:imports rdf:resource="https://ontology.unifiedcyberontology.org/uco/role/0.9.1"/>
 		<owl:ontologyIRI rdf:resource="https://ontology.caseontology.org/case/investigation"/>
-		<owl:priorVersion rdf:resource="https://ontology.caseontology.org/case/investigation/0.7.1"/>
-		<owl:versionIRI rdf:resource="https://ontology.caseontology.org/case/investigation/1.0.0"/>
+		<owl:versionIRI rdf:resource="https://ontology.caseontology.org/case/investigation/0.7.1"/>
 	</owl:Ontology>
 	
 	<rdf:Description rdf:about="https://ontology.caseontology.org/case/investigation/Attorney">
@@ -59,6 +57,7 @@
 			<rdf:Description>
 				<sh:datatype rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
 				<sh:maxCount rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</sh:maxCount>
+				<sh:minCount rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</sh:minCount>
 				<sh:nodeKind rdf:resource="http://www.w3.org/ns/shacl#Literal"/>
 				<sh:path rdf:resource="https://ontology.caseontology.org/case/investigation/authorizationType"/>
 			</rdf:Description>
@@ -66,6 +65,7 @@
 		<sh:property>
 			<rdf:Description>
 				<sh:datatype rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+				<sh:minCount rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</sh:minCount>
 				<sh:nodeKind rdf:resource="http://www.w3.org/ns/shacl#Literal"/>
 				<sh:path rdf:resource="https://ontology.caseontology.org/case/investigation/authorizationIdentifier"/>
 			</rdf:Description>
@@ -138,53 +138,9 @@
 		<sh:property>
 			<rdf:Description>
 				<sh:datatype rdf:resource="https://ontology.caseontology.org/case/vocabulary/InvestigationFormVocab"/>
-				<sh:message>Value is outside the default vocabulary InvestigationFormVocab.</sh:message>
-				<sh:path rdf:resource="https://ontology.caseontology.org/case/investigation/investigationForm"/>
-				<sh:severity rdf:resource="http://www.w3.org/ns/shacl#Info"/>
-			</rdf:Description>
-		</sh:property>
-		<sh:property>
-			<rdf:Description>
 				<sh:maxCount rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</sh:maxCount>
+				<sh:minCount rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</sh:minCount>
 				<sh:nodeKind rdf:resource="http://www.w3.org/ns/shacl#Literal"/>
-				<sh:or rdf:parseType="Collection">
-					<rdf:Description>
-						<sh:datatype rdf:resource="https://ontology.caseontology.org/case/vocabulary/InvestigationFormVocab"/>
-					</rdf:Description>
-					<rdf:Description>
-						<sh:datatype rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-					</rdf:Description>
-				</sh:or>
-				<sh:path rdf:resource="https://ontology.caseontology.org/case/investigation/investigationForm"/>
-			</rdf:Description>
-		</sh:property>
-		<sh:property>
-			<rdf:Description>
-				<sh:message>Value is not member of the vocabulary InvestigationFormVocab.</sh:message>
-				<sh:or rdf:parseType="Collection">
-					<rdf:Description>
-						<sh:datatype rdf:resource="https://ontology.caseontology.org/case/vocabulary/InvestigationFormVocab"/>
-						<sh:in>
-							<rdf:Description>
-								<rdf:first rdf:datatype="https://ontology.caseontology.org/case/vocabulary/InvestigationFormVocab">case</rdf:first>
-								<rdf:rest>
-									<rdf:Description>
-										<rdf:first rdf:datatype="https://ontology.caseontology.org/case/vocabulary/InvestigationFormVocab">incident</rdf:first>
-										<rdf:rest>
-											<rdf:Description>
-												<rdf:first rdf:datatype="https://ontology.caseontology.org/case/vocabulary/InvestigationFormVocab">suspicious-activity</rdf:first>
-												<rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-											</rdf:Description>
-										</rdf:rest>
-									</rdf:Description>
-								</rdf:rest>
-							</rdf:Description>
-						</sh:in>
-					</rdf:Description>
-					<rdf:Description>
-						<sh:datatype rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-					</rdf:Description>
-				</sh:or>
 				<sh:path rdf:resource="https://ontology.caseontology.org/case/investigation/investigationForm"/>
 			</rdf:Description>
 		</sh:property>
@@ -295,16 +251,7 @@
 	<owl:DatatypeProperty rdf:about="https://ontology.caseontology.org/case/investigation/investigationForm">
 		<rdfs:label xml:lang="en">investigationForm</rdfs:label>
 		<rdfs:comment xml:lang="en">A label categorizing a type of investigation (case, incident, suspicious-activity, etc.)</rdfs:comment>
-		<rdfs:range>
-			<rdfs:Datatype>
-				<owl:unionOf rdf:parseType="Collection">
-					<rdf:Description rdf:about="https://ontology.caseontology.org/case/vocabulary/InvestigationFormVocab">
-					</rdf:Description>
-					<rdf:Description rdf:about="http://www.w3.org/2001/XMLSchema#string">
-					</rdf:Description>
-				</owl:unionOf>
-			</rdfs:Datatype>
-		</rdfs:range>
+		<rdfs:range rdf:resource="https://ontology.caseontology.org/case/vocabulary/InvestigationFormVocab"/>
 	</owl:DatatypeProperty>
 	
 	<owl:DatatypeProperty rdf:about="https://ontology.caseontology.org/case/investigation/investigationStatus">
