@@ -6,6 +6,7 @@
     "/case/case/1.1.0": "/documentation/index.html",
     "/case/case/1.2.0": "/documentation/index.html",
     "/case/case/1.3.0": "/documentation/index.html",
+    "/case/case/1.4.0": "/documentation/index.html",
     "/case/investigation": "/documentation/index.html",
     "/case/investigation/": "/documentation/index.html",
     "/case/investigation/0.7.1": "/documentation/index.html",
@@ -13,11 +14,13 @@
     "/case/investigation/1.1.0": "/documentation/index.html",
     "/case/investigation/1.2.0": "/documentation/index.html",
     "/case/investigation/1.3.0": "/documentation/index.html",
+    "/case/investigation/1.4.0": "/documentation/index.html",
     "/case/investigation/Attorney": "/documentation/class-investigationattorney.html",
     "/case/investigation/Authorization": "/documentation/class-investigationauthorization.html",
     "/case/investigation/Examiner": "/documentation/class-investigationexaminer.html",
     "/case/investigation/ExaminerActionLifecycle": "/documentation/class-investigationexamineractionlifecycle.html",
     "/case/investigation/Investigation": "/documentation/class-investigationinvestigation.html",
+    "/case/investigation/Investigation-investigationForm-in-shape": "/documentation/shape-investigationinvestigation-investigationform-in-shape.html",
     "/case/investigation/InvestigativeAction": "/documentation/class-investigationinvestigativeaction.html",
     "/case/investigation/Investigator": "/documentation/class-investigationinvestigator.html",
     "/case/investigation/ProvenanceRecord": "/documentation/class-investigationprovenancerecord.html",
@@ -40,5 +43,6 @@
     "/case/vocabulary/1.0.0": "/documentation/index.html",
     "/case/vocabulary/1.1.0": "/documentation/index.html",
     "/case/vocabulary/1.2.0": "/documentation/index.html",
-    "/case/vocabulary/1.3.0": "/documentation/index.html"
+    "/case/vocabulary/1.3.0": "/documentation/index.html",
+    "/case/vocabulary/1.4.0": "/documentation/index.html"
 }

@@ -5,16 +5,19 @@
     "/case/case/1.1.0": "/case/case/1.1.0.rdf",
     "/case/case/1.2.0": "/case/case/1.2.0.rdf",
     "/case/case/1.3.0": "/case/case/1.3.0.rdf",
+    "/case/case/1.4.0": "/case/case/1.4.0.rdf",
     "/case/investigation": "/case/investigation.rdf",
     "/case/investigation/0.7.1": "/case/investigation/0.7.1.rdf",
     "/case/investigation/1.0.0": "/case/investigation/1.0.0.rdf",
     "/case/investigation/1.1.0": "/case/investigation/1.1.0.rdf",
     "/case/investigation/1.2.0": "/case/investigation/1.2.0.rdf",
     "/case/investigation/1.3.0": "/case/investigation/1.3.0.rdf",
+    "/case/investigation/1.4.0": "/case/investigation/1.4.0.rdf",
     "/case/vocabulary": "/case/vocabulary.rdf",
     "/case/vocabulary/0.7.1": "/case/vocabulary/0.7.1.rdf",
     "/case/vocabulary/1.0.0": "/case/vocabulary/1.0.0.rdf",
     "/case/vocabulary/1.1.0": "/case/vocabulary/1.1.0.rdf",
     "/case/vocabulary/1.2.0": "/case/vocabulary/1.2.0.rdf",
-    "/case/vocabulary/1.3.0": "/case/vocabulary/1.3.0.rdf"
+    "/case/vocabulary/1.3.0": "/case/vocabulary/1.3.0.rdf",
+    "/case/vocabulary/1.4.0": "/case/vocabulary/1.4.0.rdf"
 }
