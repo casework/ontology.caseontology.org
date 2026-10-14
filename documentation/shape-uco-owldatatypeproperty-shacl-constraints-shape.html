@@ -2960,8 +2960,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 <span class="nn">uco-owl</span><span class="p">:</span><span class="nt">DatatypeProperty-shacl-constraints-shape</span> <span class="kt">a</span> <span class="nn">sh</span><span class="p">:</span><span class="nt">NodeShape</span> <span class="p">;</span>
     <span class="nn">sh</span><span class="p">:</span><span class="nt">sparql</span> <span class="p">[</span> <span class="kt">a</span> <span class="nn">sh</span><span class="p">:</span><span class="nt">SPARQLConstraint</span> <span class="p">;</span>
-            <span class="nn">sh</span><span class="p">:</span><span class="nt">message</span> <span class="s">&quot;An OWL Datatype Property cannot use a SHACL ClassConstraintComponent.&quot;</span><span class="o">@</span><span class="ge">en</span> <span class="p">;</span>
-            <span class="nn">sh</span><span class="p">:</span><span class="nt">select</span> <span class="s">&quot;&quot;&quot;</span>
+            <span class="nn">sh</span><span class="p">:</span><span class="nt">message</span> <span class="s">"An OWL Datatype Property cannot use a SHACL ClassConstraintComponent."</span><span class="o">@</span><span class="ge">en</span> <span class="p">;</span>
+            <span class="nn">sh</span><span class="p">:</span><span class="nt">select</span> <span class="s">"""</span>
 <span class="s">				PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;</span>
 <span class="s">				PREFIX sh: &lt;http://www.w3.org/ns/shacl#&gt;</span>
 <span class="s">				SELECT $this ?value</span>
@@ -2975,10 +2975,10 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="s">						rdf:rest rdf:nil ;</span>
 <span class="s">						.</span>
 <span class="s">				}</span>
-<span class="s">			&quot;&quot;&quot; ],</span>
+<span class="s">			""" ],</span>
 <span class="s">        [ a sh:SPARQLConstraint ;</span>
-<span class="s">            sh:message &quot;An OWL Datatype Property must not permit a non-Literal value via SHACL constraints.&quot;@en ;</span>
-<span class="s">            sh:select &quot;&quot;&quot;</span>
+<span class="s">            sh:message "An OWL Datatype Property must not permit a non-Literal value via SHACL constraints."@en ;</span>
+<span class="s">            sh:select """</span>
 <span class="s">				PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;</span>
 <span class="s">				PREFIX sh: &lt;http://www.w3.org/ns/shacl#&gt;</span>
 <span class="s">				SELECT $this ?value</span>
@@ -3001,7 +3001,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="s">					UNION</span>
 <span class="s">					{ ?value sh:nodeKind sh:IRIOrLiteral . }</span>
 <span class="s">				}</span>
-<span class="s">			&quot;&quot;&quot;</span> <span class="p">]</span> <span class="p">;</span>
+<span class="s">			"""</span> <span class="p">]</span> <span class="p">;</span>
     <span class="nn">sh</span><span class="p">:</span><span class="nt">targetClass</span> <span class="nn">owl</span><span class="p">:</span><span class="nt">DatatypeProperty</span> <span class="p">.</span>
 </pre></div>
 
@@ -3032,7 +3032,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <footer class="footer">
     <div class="container">
     
-      <p class="text-muted">Documentation automatically generated on Fri, 24 Jul 2026 17:45:45 with <a href="http://lambdamusic.github.io/Ontospy/">Ontospy</a> (v2.1.1)</p>
+      <p class="text-muted">Documentation automatically generated on Wed, 14 Oct 2026 12:41:24 with <a href="http://lambdamusic.github.io/Ontospy/">Ontospy</a> (v2.5)</p>
 
     
     </div>
@@ -3093,7 +3093,7 @@ $('#search-input-sidebar').keyup(function() {
 
     $(document).ready(function (){
       $('#sidebar-wrapper').animate({
-          scrollTop: $("#sd_1878").offset().top - 100
+          scrollTop: $("#sd_1909").offset().top - 100
       }, 100);
     });
 
